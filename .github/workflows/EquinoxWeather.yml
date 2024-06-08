@@ -8,7 +8,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: .\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
-  WORKING_DIRECTORY: .
+  WORKING_DIRECTORY: ./EquinoxWeather
 jobs:
   build:
     runs-on: windows-latest
@@ -19,7 +19,7 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
     - name: Restore
-      run: dotnet restore "${{ env.WORKING_DIRECTORY }}/EquinoxWeather"
+      run: dotnet restore "${{ env.WORKING_DIRECTORY }}/EquinoxWeather.sln"
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
