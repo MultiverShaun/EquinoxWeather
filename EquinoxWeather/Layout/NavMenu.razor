@@ -1,0 +1,202 @@
+﻿@using EquinoxWeather.Infrastructure.Interfaces
+@inject IRepository _repo
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+    <a class="navbar-brand mx-auto" asp-area="" asp-controller="Home" asp-action="Index">
+        <img src="@(WeatherIcon)" alt="Weather Icon" class="weather-icon" width="32px" height="32px" />
+    </a>
+    <span style="font-size: 150%;">@(Temperature)°</span>
+    <div class="container-fluid justify-content-center">
+        <div class="form-inline my-2 my-lg-0 position-relative">
+            <input class="form-control mr-sm-2 @(Suggestions.Any() ? "suggestions-active" : "")"
+                   type="text"
+                   placeholder="Search for a place"
+                   id="citySearch"
+                   aria-label="Search for a place"
+                   @oninput="FetchSuggestions"
+                   @bind-value="SearchQuery">
+
+            @if (Suggestions.Any())
+            {
+                <ul class="suggestions-list">
+                    @foreach (var suggestion in Suggestions)
+                    {
+                        <li @onclick="() => SelectSuggestion(suggestion)">
+                            @suggestion.Name <span class="suggestion-area">@suggestion.Admin1@(string.IsNullOrEmpty(suggestion.Admin1) ? "" : ", ")@suggestion.Country</span>
+                        </li>
+                    }
+
+                </ul>
+            }
+        </div>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <div class="nav-link d-flex" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                    <i class="fas fa-sliders-h"></i>
+                    <span class="units-label d-none d-sm-block">Units</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Modal -->
+<div class="modal fade" id="settingsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark settings-modal">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 settings-modal-title" id="settingsModalLabel">Adjust Units</h1>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" @onclick="ReloadPage"></button>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <div class="modal-body temp-modal">
+                            
+                            <h5>Temperature</h5>
+                            <div class="btn-group" role="group" aria-label="Celcius/fahrenheit settings">
+                                <input type="radio" class="btn-check" name="btntemp" id="btntemp1" autocomplete="off" checked='@(UnitTemp == "c")' @onchange='() => UpdateSettings("unit_temp", "c")'>
+                                <label class="btn btn-outline-primary" for="btntemp1">°C</label>
+
+                                <input type="radio" class="btn-check" name="btntemp" id="btntemp2" autocomplete="off" checked='@(UnitTemp == "f")' @onchange='() => UpdateSettings("unit_temp", "f")'>
+                                <label class="btn btn-outline-primary" for="btntemp2">°F</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="modal-body temp-modal">
+                            <h5>Distance</h5>
+                            <div class="btn-group" role="group" aria-label="Kilometers/Miles settings">
+                                <input type="radio" class="btn-check" name="btndistance" id="btndistance1" autocomplete="off" checked='@(UnitDistance == "km")' @onchange='() => UpdateSettings("unit_distance", "km")'>
+                                <label class="btn btn-outline-primary" for="btndistance1">km</label>
+
+                                <input type="radio" class="btn-check" name="btndistance" id="btndistance2" autocomplete="off" checked='@(UnitDistance == "mi")' @onchange='() => UpdateSettings("unit_distance", "mi")'>
+                                <label class="btn btn-outline-primary" for="btndistance2">mi</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="modal-body temp-modal">
+                            <h5>Decimals</h5>
+                            <div class="btn-group" role="group" aria-label="Show decimals settings">
+                                <input type="radio" class="btn-check" name="btndecimal" id="btndecimal1" autocomplete="off" checked='@(UnitDecimal == "no")' @onchange='() => UpdateSettings("unit_decimal", "no")'>
+                                <label class="btn btn-outline-primary" for="btndecimal1">No</label>
+
+                                <input type="radio" class="btn-check" name="btndecimal" id="btndecimal2" autocomplete="off" checked='@(UnitDecimal == "yes")' @onchange='() => UpdateSettings("unit_decimal", "yes")'>
+                                <label class="btn btn-outline-primary" for="btndecimal2">Yes</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="ReloadPage">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Temperature { get; set; }
+    [Parameter]
+    public string? WeatherIcon { get; set; }
+    public string? UnitTemp = "";
+    public string? UnitDistance = "";
+    public string? UnitDecimal = "";
+
+    private bool settingsChanged = false;
+
+    private List<CitySuggestion> Suggestions { get; set; } = new List<CitySuggestion>();
+
+    private string SearchQuery { get; set; }
+
+    private CancellationTokenSource _debounceTokenSource = new CancellationTokenSource();
+
+    private async Task FetchSuggestions(ChangeEventArgs args)
+    {
+        SearchQuery = args.Value.ToString();
+
+        if (string.IsNullOrEmpty(SearchQuery) || SearchQuery.Length < 3)
+        {
+            Suggestions.Clear();
+            return;
+        }
+
+        // Cancel any previous pending tasks
+        _debounceTokenSource.Cancel();
+        _debounceTokenSource = new CancellationTokenSource();
+
+        try
+        {
+            await Task.Delay(250, _debounceTokenSource.Token);
+
+            if (!_debounceTokenSource.Token.IsCancellationRequested)
+            {
+                var geocodingResponse = await _repo.GetCitySuggestions(SearchQuery);
+                Suggestions = geocodingResponse?.Results?.Select(r => new CitySuggestion
+                    {
+                        Name = r.Name,
+                        Latitude = r.Latitude,
+                        Longitude = r.Longitude,
+                        Admin1 = r.Admin1,
+                        Country = r.Country
+                    }).ToList() ?? new List<CitySuggestion>();
+
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Ignore the cancellation exception
+        }
+    }
+
+    private async Task SelectSuggestion(CitySuggestion suggestion)
+    {
+        SearchQuery = suggestion.Name;
+        Suggestions.Clear();
+
+        // Update the CityState with the selected city's information
+        await LocalStorage.SetItemAsStringAsync("city_name", suggestion.Name);
+        await LocalStorage.SetItemAsStringAsync("country_name", suggestion.Country);
+
+        // Convert coordinates
+        int lat = Convert.ToInt32(suggestion.Latitude * 10000);
+        int lon = Convert.ToInt32(suggestion.Longitude * 10000);
+        // Navigate to the new URL
+        var url = $"/{lat}/{lon}";
+        NavigationManager.NavigateTo(url);
+    }
+
+    private async Task FetchSettings()
+    {
+        UnitTemp = await LocalStorage.GetItemAsStringAsync("unit_temp");
+        UnitDistance = await LocalStorage.GetItemAsStringAsync("unit_distance");
+        UnitDecimal = await LocalStorage.GetItemAsStringAsync("unit_decimal");
+    }
+
+    private async Task UpdateSettings(string key, string value)
+    {
+        await LocalStorage.SetItemAsStringAsync(key, value);
+        settingsChanged = true;
+        await FetchSettings();
+    }
+
+    private void ReloadPage()
+    {
+        if (settingsChanged == true)
+        {
+            NavigationManager.NavigateTo(NavigationManager.Uri, true);
+        }
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await FetchSettings();
+    }
+}

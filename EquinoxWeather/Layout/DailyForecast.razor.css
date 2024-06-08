@@ -1,0 +1,43 @@
+﻿.daily-forecast-card {
+    display: flex;
+    width: 100%;
+    background-color: rgb(255, 255, 255, 0.1);
+    border: 1px solid rgb(255, 255, 255, 0.2);
+    padding: 1rem;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+    justify-content: space-between;
+}
+
+    .daily-forecast-card:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+.daily-forecast-1 {
+    font-size: 125%;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+}
+
+.weather-icon {
+    margin: auto 10px;
+}
+
+.daily-forecast-2 {
+    font-size: 125%;
+    display: inline-flex;
+    align-items: center;
+}
+
+.temp {
+    margin-right: 5px;
+}
+
+@media (max-width: 362px) {
+    .chance-of-rain {
+        display: none;
+    }
+}
