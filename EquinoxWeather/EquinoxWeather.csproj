@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Content Include="wwwroot\weather_backgrounds\**\*" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="wwwroot\weather_icons\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
