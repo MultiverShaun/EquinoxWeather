@@ -1,0 +1,273 @@
+﻿@inject IRepository _repo
+@inject ILocalStorageService LocalStorage
+
+@* <h2 style="text-align: center;">Information</h2> *@
+<div class="advanced-info-grid">
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-clock"></i> Time</h3>
+        <h2>@(LocationTime)</h2>
+    </div>
+
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-droplet"></i> Humidity</h3>
+        <h2 style="color: @(humidityColor);"><i class="fas @(humidityIcon)"></i> @(Humidity)%</h2>
+        <div class="progress w-100" role="progressbar" aria-label="Humidity" aria-valuenow="@(Humidity)" aria-valuemin="0" aria-valuemax="100" style="border-radius: 1rem;">
+
+            <div class="progress-bar" style="width: @(Humidity)%; background-color: @(humidityColor);"></div>
+
+        </div>
+    </div>
+
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-umbrella"></i> Precipitation Chance</h3>
+        <h2>@(PrecipitationChance)%</h2>
+    </div>
+
+
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-eye"></i> Visibility</h3>
+        @if (unitDistance == "mi")
+        {
+            <h2>@(Math.Round(Visibility / 1.609))mi</h2>
+        }
+        else
+        {
+            <h2>@(Visibility)km</h2>
+        }
+    </div>
+
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-cloud-sun"></i> Clouds</h3>
+        <h2>@(CloudCover)%</h2>
+    </div>
+
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-leaf"></i> Dew Point</h3>
+        <h2>@(DewPoint)@(TempUnit)</h2>
+    </div>
+
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-sun"></i> UV Index</h3>
+
+        <h2>@(UvIndex) <span style="font-size: 1.75rem; font-weight: 500;">(@UvIndexDescription)</span></h2>
+        
+    </div>
+
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-gauge"></i> Pressure</h3>
+        <h2 style="color: @(airPressureColor);"><i class="fas @(airPressureIcon)"></i> @(AirPressure) <span style="font-size: 66%">@(AirPressureUnit)</span></h2>
+    </div>
+
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-wind"></i> Wind</h3>
+        <h2>@(WindSpeed) @WindSpeedUnit</h2>
+        <h5>@(parsedDirection)</h5>
+    </div>
+
+    <div class="advanced-info-tile">
+    @if (IsDay == 1)
+    {
+        <h3 class="tile-title"><i class="fas fa-circle-half-stroke"></i> Sunset </h3>
+        <h2>@(convertedSunset)</h2>
+@*         <h5>@(timeToSunriseOrSunset) left</h5>
+        <div class="sun-progress-bar">
+            <i class="fas fa-sun"></i>
+
+                <div class="progress w-75" role="progressbar" aria-label="Time to sunrise" aria-valuenow="@(minutesFromSunriseToSunset-minutesToSunriseOrSunset)" aria-valuemin="0" aria-valuemax="@(minutesFromSunriseToSunset)" style="border-radius: 1rem;">
+
+                    <div class="progress-bar bg-warning" style="width: @((minutesFromSunriseToSunset-minutesToSunriseOrSunset) / minutesFromSunriseToSunset * 100)%;"></div>
+
+            </div>
+            <i class="fas fa-moon"></i>
+
+        </div> *@
+    }
+    else if (IsDay == 0)
+    {
+        <h3 class="tile-title"><i class="fas fa-circle-half-stroke fa-rotate-180"></i> Sunrise </h3>
+        <h2>@(convertedSunrise)</h2>
+@*         <h5>@(timeToSunriseOrSunset) left</h5>
+
+        <div class="sun-progress-bar">
+                <i class="fas fa-moon"></i>
+                <div class="progress w-75" role="progressbar" aria-label="Time to sunrise" aria-valuenow="@(minutesFromSunriseToSunset-minutesToSunriseOrSunset)" aria-valuemin="0" aria-valuemax="@(minutesFromSunriseToSunset)" style="border-radius: 1rem;">
+
+                    <div class="progress-bar" style="width: @((minutesFromSunriseToSunset-minutesToSunriseOrSunset) / minutesFromSunriseToSunset * 100)%;"></div>
+
+            </div>
+            <i class="fas fa-sun"></i>
+        </div> *@
+    }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string ?LocationTime { get; set; }
+    [Parameter]
+    public string? TimeZone { get; set; }
+
+    [Parameter]
+    public int Humidity { get; set; }
+    public string humidityIcon = "";
+    public string humidityColor = "";
+
+    [Parameter]
+    public int PrecipitationChance { get; set; }
+    [Parameter]
+    public int UvIndex { get; set; }
+    public string ?UvIndexDescription { get; set; }
+
+    [Parameter]
+    public int DewPoint { get; set; }
+    [Parameter]
+    public string TempUnit { get; set; }
+
+
+    [Parameter]
+    public int CloudCover { get; set; }
+
+    [Parameter]
+    public double Visibility { get; set; }
+    private string? unitDistance = "";
+
+    [Parameter]
+    public double AirPressure { get; set; }
+    [Parameter]
+    public string ?AirPressureUnit { get; set; }
+    public string ?airPressureIcon { get; set; }
+    public string ?airPressureColor { get; set; }
+
+    [Parameter]
+    public double WindSpeed { get; set; }
+    [Parameter]
+    public string ?WindSpeedUnit { get; set; }
+    [Parameter]
+    public int WindDirection { get; set; }
+    public string parsedDirection = "";
+
+    [Parameter]
+    public string ?Sunrise { get; set; }
+    public string convertedSunrise = "";
+    [Parameter]
+    public string ?Sunset { get; set; }
+    public string convertedSunset = "";
+
+    public double minutesToSunriseOrSunset { get; set; }
+    public string ?timeToSunriseOrSunset { get; set; }
+    public double minutesFromSunriseToSunset { get; set; }
+
+    [Parameter]
+    public int IsDay { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+
+        // Humidity
+        if (Humidity < 30)
+        {
+            humidityIcon = "fa-circle-down";
+            humidityColor = "#ADF3FD";
+        }
+        else if (Humidity >= 30 && Humidity <= 50)
+        {
+            humidityIcon = "fa-thumbs-up";
+            humidityColor = "#bbfcc0";
+        }
+        else if (Humidity > 50 && Humidity < 60)
+        {
+            humidityIcon = "fa-thumbs-up";
+            humidityColor = "#ffe278";
+        }
+        else if (Humidity >= 60 && Humidity <= 80)
+        {
+            humidityIcon = "fa-thumbs-down";
+            humidityColor = "#ffcf78";
+        }
+        else if (Humidity > 80)
+        {
+            humidityIcon = "fa-volcano";
+            humidityColor = "#ff5c57";
+        }
+
+        // Visibility
+        unitDistance = await LocalStorage.GetItemAsStringAsync("unit_distance");
+
+        // Air Pressure
+        if (AirPressure >= 1020)
+        {
+            airPressureIcon = "fa-circle-up";
+            airPressureColor = "#bbfcc0";
+        }
+        else if (AirPressure < 1020 && AirPressure >= 1000)
+        {
+            airPressureIcon = "fa-thumbs-up";
+            airPressureColor = "#bbfcc0";
+        }
+        else if (AirPressure < 1000)
+        {
+            airPressureIcon = "fa-circle-down";
+            airPressureColor = "#ADF3FD";
+        }
+
+        // UV Index
+        if (UvIndex <= 2)
+        {
+            UvIndexDescription = "Low";
+        }
+        else if (UvIndex <= 5 && UvIndex >= 3)
+        {
+            UvIndexDescription = "Moderate";
+        }
+        else if (UvIndex <= 7 && UvIndex >= 6)
+        {
+            UvIndexDescription = "High";
+        }
+        else if (UvIndex <= 10 && UvIndex >= 8)
+        {
+            UvIndexDescription = "Very High";
+        }
+        else if (UvIndex > 10)
+        {
+            UvIndexDescription = "Extreme";
+        }
+        // Wind
+        parsedDirection = await _repo.ParseDegree(WindDirection);
+
+        // Sunrise/Sunset
+        DateTime rawSunrise = DateTime.Parse($"{Sunrise}", null, System.Globalization.DateTimeStyles.RoundtripKind);
+        DateTime rawSunset = DateTime.Parse($"{Sunset}", null, System.Globalization.DateTimeStyles.RoundtripKind);
+
+        if (IsDay == 1)
+        {
+            convertedSunset = rawSunset.ToString("hh:mm tt");
+        }
+        else if (IsDay == 0)
+        {
+            convertedSunrise = rawSunrise.ToString("hh:mm tt");
+        }
+
+        
+        @* DateTime rawSunrise = DateTime.Parse($"{Sunrise}", null, System.Globalization.DateTimeStyles.RoundtripKind);
+        DateTime rawSunset = DateTime.Parse($"{Sunset}", null, System.Globalization.DateTimeStyles.RoundtripKind);
+        TimeSpan rawTimeToSunriseOrSunset = default;
+        TimeSpan timeFromSunriseToSunset = rawSunset - rawSunrise;
+
+        if (IsDay == 1)
+        {
+            rawTimeToSunriseOrSunset = rawSunset - DateTime.Now;
+            convertedSunset = rawSunset.ToString("hh:mm tt");
+            minutesFromSunriseToSunset = Math.Abs(timeFromSunriseToSunset.TotalMinutes);
+        }
+        else if (IsDay == 0)
+        {
+            rawTimeToSunriseOrSunset = rawSunrise - DateTime.Now.AddHours(-24);
+            convertedSunrise = rawSunrise.ToString("hh:mm tt");
+            minutesFromSunriseToSunset = Math.Abs(timeFromSunriseToSunset.TotalMinutes - 1440);
+
+        }
+
+        minutesToSunriseOrSunset = Math.Abs(rawTimeToSunriseOrSunset.TotalMinutes);
+        timeToSunriseOrSunset = $"{(int)rawTimeToSunriseOrSunset.TotalHours:D2}:{rawTimeToSunriseOrSunset.Minutes:D2}"; *@
+    }
+}

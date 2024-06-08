@@ -1,0 +1,17 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+
+@code {
+    protected override void OnInitialized()
+    {
+        // Manila
+        var defaultLat = 145995;
+        var defaultLon = 1209842;
+
+        LocalStorage.SetItemAsStringAsync("city_name", "Manila");
+        LocalStorage.SetItemAsStringAsync("country_name", "Philippines");
+
+        NavigationManager.NavigateTo($"/{defaultLat}/{defaultLon}");
+    }
+}

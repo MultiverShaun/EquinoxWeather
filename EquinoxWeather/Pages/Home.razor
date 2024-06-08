@@ -1,0 +1,197 @@
+﻿@page "/{Lat:int}/{Lon:int}"
+@using EquinoxWeather.Layout
+@using EquinoxWeather.Infrastructure.Interfaces
+@inject IRepository _repo
+@inject ILocalStorageService LocalStorage
+
+<PageTitle>Equinox · @cityName@(string.IsNullOrEmpty(countryName) ? "" : ", ")@countryName</PageTitle>
+
+@if (isDataLoaded){
+
+	<div class="navigation px-4">
+		<NavMenu Temperature="@roundedTemperature" WeatherIcon="@weatherIcon" />
+	</div>
+
+	<style>
+
+		.content {
+			background-image: url('@(photoDirectUrl)');
+			@* background-image: url('weather_backgrounds/partly_cloudy_night.webp'); *@
+			background-size: cover;
+			background-position: center;
+			min-height: 100vh;
+			color: white;
+			padding-top: calc(5% + 70px);
+			padding-bottom: 10px;
+		}
+
+	</style>
+	<div class="weather-main">
+		<h1 class="location">@cityName@(string.IsNullOrEmpty(countryName) ? "" : ", ")@countryName</h1>
+		<div class="temperature-container">
+			<h1 class="temperature">@(roundedTemperature)</h1>
+			<h1 class="degree-symbol">@Weather.current_units.temperature_2m</h1>
+		</div>
+		<h2>@weatherStatus?.CodeDescription() @(roundedMaxTemp)°<span style="color: #dddddd;">/</span>@(roundedMinTemp)°</h2>
+
+		<h4 style="margin-bottom: 2rem;">Feels like <b>@roundedTemperatureApparent@Weather.current_units.apparent_temperature</b></h4>
+
+		<div class="photo-credits-container px-3 py-1 mx-auto">
+			<a class="photo-credits" href="@(photoCreditUrl)" target="_blank">
+				@if (weatherStatus.FromUnsplash())
+				{
+					<span>
+						<i class="fas fa-arrow-up-right-from-square"></i>
+						Photo by
+						@(photoAuthorName)
+						on Unsplash
+					</span>
+				}
+				else
+				{
+					<span>Photo by Developer</span>
+				}
+			</a>
+		</div>
+		
+	</div>
+
+	<div class="weather-detail-grid">
+		<WeatherDetailGrid Weather="@Weather" WeatherStatus="@weatherStatus" WeatherIcon="@weatherIcon" Lat="@(Lat * 0.0001)" Lon="@(Lon * 0.0001)"/>
+	</div>
+
+}
+else
+{
+	<div class="d-flex justify-content-center" style="padding-top: 20%">
+		<div class="spinner-border" role="status">
+			<span class="visually-hidden">Loading...</span>
+		</div>
+	</div>
+
+}
+
+	<div>
+
+	</div>
+
+
+@code {
+
+	[Parameter]
+	public int Lat { get; set; }
+
+	[Parameter]
+	public int Lon { get; set; }
+
+	private bool unitTempIsF = false;
+	private bool unitDistanceIsMph = false;
+	private bool unitDecimal = false;
+
+	private string? cityName = "";
+	private string? countryName = "";
+
+	private IWeatherCode ? weatherStatus;
+
+	private bool isDataLoaded = false;
+
+	public OpenMeteoResponse Weather { get; set; } = new();
+	private string descriptionEasterEgg = "";
+	private int roundedTemperature = 0;
+	private int roundedTemperatureApparent = 0;
+	private int roundedMaxTemp = 0;
+	private int roundedMinTemp = 0;
+	private string photoCreditUrl = "";
+	private string photoDirectUrl = "";
+	private string photoAuthorName = "";
+	private string weatherIcon = "";
+
+	protected override async Task OnParametersSetAsync()
+	{
+		isDataLoaded = false;
+		await FetchLocalStorage();
+		await LoadWeatherData();
+	}
+
+	private async Task LoadWeatherData()
+	{
+		Weather = await _repo.GetWeather(Lat * 0.0001, Lon * 0.0001, unitTempIsF, unitDistanceIsMph);
+		roundedTemperature = Convert.ToInt32(Weather.current.temperature_2m);
+		roundedTemperatureApparent = Convert.ToInt32(Weather.current.apparent_temperature);
+		roundedMaxTemp = Convert.ToInt32(Weather.daily.temperature_2m_max.FirstOrDefault());
+		roundedMinTemp = Convert.ToInt32(Weather.daily.temperature_2m_min.FirstOrDefault());
+
+		var weatherCode = Weather.current.weather_code;
+		weatherStatus = await _repo.GetWeatherCodeInfo(weatherCode);
+
+		if (Weather.current.is_day == 1)
+		{
+			photoCreditUrl = weatherStatus.DayPhotoCreditUrl();
+			photoDirectUrl = weatherStatus.DayPhotoDirectUrl();
+			photoAuthorName = weatherStatus.DayPhotoAuthorName();
+		}
+		else
+		{
+			photoCreditUrl = weatherStatus.NightPhotoCreditUrl();
+			photoDirectUrl = weatherStatus.NightPhotoDirectUrl();
+			photoAuthorName = weatherStatus.NightPhotoAuthorName();
+		}
+
+		if (weatherCode == 63)
+		{
+			descriptionEasterEgg = "Hindi ka ba nilalamig?";
+		}
+
+		if (Weather.current.is_day == 1)
+		{
+			weatherIcon = weatherStatus.WeatherIconDay();
+		}
+		else if (Weather.current.is_day == 0)
+		{
+			weatherIcon = weatherStatus.WeatherIconNight();
+		}
+
+		isDataLoaded = true;
+	}
+
+	private async Task FetchLocalStorage()
+	{
+		string? UnitTemp = await LocalStorage.GetItemAsStringAsync("unit_temp");
+		string? UnitDistance = await LocalStorage.GetItemAsStringAsync("unit_distance");
+		string? UnitDecimal = await LocalStorage.GetItemAsStringAsync("unit_decimal");
+		cityName = await LocalStorage.GetItemAsStringAsync("city_name");
+		countryName = await LocalStorage.GetItemAsStringAsync("country_name");
+
+		if (UnitTemp == "f")
+		{
+			unitTempIsF = true;
+		} 
+		if (UnitDistance == "mi")
+		{
+			unitDistanceIsMph = true;
+		}
+		if (UnitDecimal == "yes")
+		{
+			unitDecimal = true;
+		}
+	}
+
+	protected async override Task OnInitializedAsync()
+	{
+		await FetchLocalStorage();
+		await LoadWeatherData();
+	}
+
+}
+
+@*
+	Credits Page
+
+	Frosted Glass Weather Icons: https://www.figma.com/community/file/1283826005232351466
+
+	Background Images from Unsplash
+	- Add accordion with list of all images
+
+	Data provided by OpenMeteo
+
+*@

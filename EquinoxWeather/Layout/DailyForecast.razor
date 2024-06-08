@@ -1,0 +1,87 @@
+﻿@inject IRepository _repo
+
+<div class="daily-forecast-card">
+
+	<span class="daily-forecast-1">
+        @(dayDisplay) 
+        <img src="@(weatherIcon)" alt="Weather Icon" class="weather-icon" width="36px" height="36px" />
+    </span>
+    <span class="daily-forecast-2">
+        <i class="fas fa-umbrella chance-of-rain" style="margin: auto 5px;"></i>
+        <span class="chance-of-rain">@(PrecipitationProbability)%</span>
+        <i class="fas fa-temperature-half" style="margin: auto 5px;" ></i>
+        <span class="temp">@(MaxTemp)°/@(MinTemp)°</span>
+        <span class="feels-like d-none d-lg-block" style="color: #dddddd;">(@(MaxTempApparent)°/@(MinTempApparent)°)</span>
+    </span>
+
+</div>
+
+@code {
+
+    [Parameter]
+    public int Day { get; set; }
+    [Parameter]
+    public string? DayTimestamp { get; set; }
+    private string dayDisplay = "";
+    private string displayMonth = "";
+    private string displayDay = "";
+
+    [Parameter]
+    public int MaxTemp { get; set; }
+
+    [Parameter]
+    public int MinTemp { get; set; }
+
+    [Parameter]
+    public int MaxTempApparent { get; set; }
+
+    [Parameter]
+    public int MinTempApparent { get; set; }
+
+    [Parameter]
+    public string? TemperatureUnit { get; set; }
+
+    [Parameter]
+    public int PrecipitationProbability { get; set; }
+
+    [Parameter]
+    public int WeatherCode { get; set; }
+    private IWeatherCode? weatherStatus;
+
+    public string weatherIcon = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        DateTime date = DateTime.Parse(DayTimestamp);
+
+        if (date.Month < 10)
+        {
+            displayMonth = $"0{date.Month}";
+        }
+        else
+        {
+            displayMonth = $"{date.Month}";
+        }
+
+        if (date.Day < 10)
+        {
+            displayDay = $"0{date.Day}";
+        }
+        else
+        {
+            displayDay = $"{date.Day}";
+        }
+
+        dayDisplay = $"{displayMonth}/{displayDay}";
+
+        if (Day == 0)
+        {
+            dayDisplay = "Today";
+        }
+
+        weatherStatus = await _repo.GetWeatherCodeInfo(WeatherCode);
+
+        weatherIcon = weatherStatus.WeatherIconDay();
+
+    }
+}

@@ -1,0 +1,28 @@
+﻿.aqi-main {
+    max-width: 500px;
+}
+
+.aqi {
+    font-size: 500%;
+}
+
+.pollutant {
+    color: lightgray;
+}
+
+.more-info {
+    text-align: center;
+    width: 50%;
+    margin: auto;
+    background-color: rgb(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    padding: 2px 5px 3px 5px;
+    transition: all 0.3s ease;
+    text-decoration: underline;
+}
+
+    .more-info:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }

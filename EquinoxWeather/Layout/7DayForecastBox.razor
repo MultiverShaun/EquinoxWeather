@@ -1,0 +1,16 @@
+﻿<h2 style="text-align: center;"><i class="fas fa-calendar-week fa-sm"></i> 7-Day Forecast</h2>
+
+<div class="day-forecast-list">
+
+    @for (int index = 0; index <= 6; index++)
+    {
+        <DailyForecast DayTimestamp="@Weather.daily.time[index]" Day="@index" MaxTemp="@Convert.ToInt32(Weather.daily.temperature_2m_max[index])" MinTemp="@Convert.ToInt32(Weather.daily.temperature_2m_min[index])" MaxTempApparent="@Convert.ToInt32(Weather.daily.apparent_temperature_max[index])" MinTempApparent="@Convert.ToInt32(Weather.daily.apparent_temperature_min[index])" TemperatureUnit="@(Weather.daily_units.temperature_2m_max)" PrecipitationProbability="@(Weather.daily.precipitation_probability_max[index])" WeatherCode="@Weather.daily.weather_code[index]" />
+    }
+
+</div>
+
+@code {
+	[Parameter]
+	public OpenMeteoResponse? Weather { get; set; }
+
+}
