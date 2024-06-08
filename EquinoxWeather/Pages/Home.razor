@@ -125,7 +125,6 @@ else
 
 	private bool unitTempIsF = false;
 	private bool unitDistanceIsMph = false;
-	private bool unitDecimal = false;
 
 	private string? cityName = "";
 	private string? countryName = "";
@@ -197,7 +196,6 @@ else
 	{
 		string? UnitTemp = await LocalStorage.GetItemAsStringAsync("unit_temp");
 		string? UnitDistance = await LocalStorage.GetItemAsStringAsync("unit_distance");
-		string? UnitDecimal = await LocalStorage.GetItemAsStringAsync("unit_decimal");
 		cityName = await LocalStorage.GetItemAsStringAsync("city_name");
 		countryName = await LocalStorage.GetItemAsStringAsync("country_name");
 
@@ -208,10 +206,6 @@ else
 		if (UnitDistance == "mi")
 		{
 			unitDistanceIsMph = true;
-		}
-		if (UnitDecimal == "yes")
-		{
-			unitDecimal = true;
 		}
 	}
 

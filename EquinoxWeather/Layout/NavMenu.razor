@@ -79,18 +79,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="modal-body temp-modal">
-                            <h5>Decimals</h5>
-                            <div class="btn-group" role="group" aria-label="Show decimals settings">
-                                <input type="radio" class="btn-check" name="btndecimal" id="btndecimal1" autocomplete="off" checked='@(UnitDecimal == "no")' @onchange='() => UpdateSettings("unit_decimal", "no")'>
-                                <label class="btn btn-outline-primary" for="btndecimal1">No</label>
-
-                                <input type="radio" class="btn-check" name="btndecimal" id="btndecimal2" autocomplete="off" checked='@(UnitDecimal == "yes")' @onchange='() => UpdateSettings("unit_decimal", "yes")'>
-                                <label class="btn btn-outline-primary" for="btndecimal2">Yes</label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             
@@ -108,7 +96,6 @@
     public string? WeatherIcon { get; set; }
     public string? UnitTemp = "";
     public string? UnitDistance = "";
-    public string? UnitDecimal = "";
 
     private bool settingsChanged = false;
 
@@ -177,7 +164,6 @@
     {
         UnitTemp = await LocalStorage.GetItemAsStringAsync("unit_temp");
         UnitDistance = await LocalStorage.GetItemAsStringAsync("unit_distance");
-        UnitDecimal = await LocalStorage.GetItemAsStringAsync("unit_decimal");
     }
 
     private async Task UpdateSettings(string key, string value)
