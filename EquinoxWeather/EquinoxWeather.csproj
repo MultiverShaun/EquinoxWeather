@@ -4,8 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Layout\CitySearch.razor" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
@@ -22,7 +25,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\weather_backgrounds\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <UpToDateCheckInput Remove="Layout\CitySearch.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Layout\CitySearch.razor" />
   </ItemGroup>
 
 </Project>
