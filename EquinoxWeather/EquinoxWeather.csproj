@@ -32,8 +32,4 @@
     <_ContentIncludedByDefault Remove="Layout\CitySearch.razor" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="Pages\CitySearch.razor" />
-  </ItemGroup>
-
 </Project>
