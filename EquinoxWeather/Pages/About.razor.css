@@ -2,7 +2,6 @@
     background-color: rgb(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 1rem;
-    backdrop-filter: blur(0.5rem);
     transition: all 0.3s ease;
     max-width: 160px;
 }

@@ -19,6 +19,7 @@
     border-radius: 2rem;
     transition: all 0.3s ease;
     backdrop-filter: blur(1.5rem);
+    -webkit-backdrop-filter: blur(1.5rem);
 }
 
 .advanced-info-tile:hover {

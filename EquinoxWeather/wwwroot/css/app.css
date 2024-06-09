@@ -96,3 +96,8 @@ footer {
         border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 1rem;
     }
+
+.blur {
+    backdrop-filter: blur(1.5rem);
+    -webkit-backdrop-filter: blur(1.5rem);
+}

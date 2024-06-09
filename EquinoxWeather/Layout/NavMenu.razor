@@ -20,7 +20,7 @@
 
             @if (Suggestions.Any())
             {
-                <ul class="suggestions-list">
+                <ul class="suggestions-list blur">
                     @foreach (var suggestion in Suggestions)
                     {
                         <li @onclick="() => SelectSuggestion(suggestion)">
