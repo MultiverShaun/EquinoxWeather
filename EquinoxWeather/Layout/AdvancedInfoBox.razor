@@ -10,10 +10,10 @@
 
     <div class="advanced-info-tile">
         <h3 class="tile-title"><i class="fas fa-droplet"></i> Humidity</h3>
-        <h2 style="color: @(humidityColor);"><i class="fas @(humidityIcon)"></i> @(Humidity)%</h2>
-        <div class="progress w-100" role="progressbar" aria-label="Humidity" aria-valuenow="@(Humidity)" aria-valuemin="0" aria-valuemax="100" style="border-radius: 1rem;">
+        <h2 style="color: @(humidityColor);"><i class="fas @(humidityIcon)"></i> @(humidity)%</h2>
+        <div class="progress w-100" role="progressbar" aria-label="humidity" aria-valuenow="@(humidity)" aria-valuemin="0" aria-valuemax="100" style="border-radius: 1rem;">
 
-            <div class="progress-bar" style="width: @(Humidity)%; background-color: @(humidityColor);"></div>
+            <div class="progress-bar" style="width: @(humidity)%; background-color: @(humidityColor);"></div>
 
         </div>
     </div>
@@ -38,12 +38,12 @@
 
     <div class="advanced-info-tile">
         <h3 class="tile-title"><i class="fas fa-cloud-sun"></i> Clouds</h3>
-        <h2>@(CloudCover)%</h2>
+        <h2>@(Weather.current.cloud_cover)%</h2>
     </div>
 
     <div class="advanced-info-tile">
         <h3 class="tile-title"><i class="fas fa-leaf"></i> Dew Point</h3>
-        <h2>@(DewPoint)@(TempUnit)</h2>
+        <h2>@(DewPoint)@(Weather.current_units.temperature_2m)</h2>
     </div>
 
     <div class="advanced-info-tile">
@@ -55,17 +55,17 @@
 
     <div class="advanced-info-tile">
         <h3 class="tile-title"><i class="fas fa-gauge"></i> Pressure</h3>
-        <h2 style="color: @(airPressureColor);"><i class="fas @(airPressureIcon)"></i> @(AirPressure) <span style="font-size: 66%">@(AirPressureUnit)</span></h2>
+        <h2 style="color: @(airPressureColor);"><i class="fas @(airPressureIcon)"></i> @(airPressure) <span style="font-size: 66%">@(airPressureUnit)</span></h2>
     </div>
 
     <div class="advanced-info-tile">
         <h3 class="tile-title"><i class="fas fa-wind"></i> Wind</h3>
-        <h2>@(WindSpeed) @WindSpeedUnit</h2>
+        <h2>@(Weather.current.wind_speed_10m) @(Weather.current_units.wind_speed_10m)</h2>
         <h5>@(parsedDirection)</h5>
     </div>
 
     <div class="advanced-info-tile">
-    @if (IsDay == 1)
+    @if (isDay == 1)
     {
         <h3 class="tile-title"><i class="fas fa-circle-half-stroke"></i> Sunset </h3>
         <h2>@(convertedSunset)</h2>
@@ -82,7 +82,7 @@
 
         </div> *@
     }
-    else if (IsDay == 0)
+    else if (isDay == 0)
     {
         <h3 class="tile-title"><i class="fas fa-circle-half-stroke fa-rotate-180"></i> Sunrise </h3>
         <h2>@(convertedSunrise)</h2>
@@ -108,7 +108,9 @@
     public string? TimeZone { get; set; }
 
     [Parameter]
-    public int Humidity { get; set; }
+    public OpenMeteoResponse? Weather { get; set; }
+
+    private int humidity = 0;
     public string humidityIcon = "";
     public string humidityColor = "";
 
@@ -120,71 +122,52 @@
 
     [Parameter]
     public int DewPoint { get; set; }
-    [Parameter]
-    public string TempUnit { get; set; }
-
-
-    [Parameter]
-    public int CloudCover { get; set; }
 
     [Parameter]
     public double Visibility { get; set; }
     private string? unitDistance = "";
 
-    [Parameter]
-    public double AirPressure { get; set; }
-    [Parameter]
-    public string ?AirPressureUnit { get; set; }
+    private double airPressure = 0;
+    private string airPressureUnit = "";
     public string ?airPressureIcon { get; set; }
     public string ?airPressureColor { get; set; }
 
-    [Parameter]
-    public double WindSpeed { get; set; }
-    [Parameter]
-    public string ?WindSpeedUnit { get; set; }
-    [Parameter]
-    public int WindDirection { get; set; }
     public string parsedDirection = "";
 
-    [Parameter]
-    public string ?Sunrise { get; set; }
     public string convertedSunrise = "";
-    [Parameter]
-    public string ?Sunset { get; set; }
     public string convertedSunset = "";
 
     public double minutesToSunriseOrSunset { get; set; }
     public string ?timeToSunriseOrSunset { get; set; }
     public double minutesFromSunriseToSunset { get; set; }
 
-    [Parameter]
-    public int IsDay { get; set; }
+    private int isDay = 0;
 
     protected async override Task OnInitializedAsync()
     {
-
-        // Humidity
-        if (Humidity < 30)
+        // humidity
+        humidity = Weather.current.relative_humidity_2m;
+        if (humidity < 30)
         {
             humidityIcon = "fa-circle-down";
             humidityColor = "#ADF3FD";
         }
-        else if (Humidity >= 30 && Humidity <= 50)
+        else if (humidity >= 30 && humidity <= 50)
         {
             humidityIcon = "fa-thumbs-up";
             humidityColor = "#bbfcc0";
         }
-        else if (Humidity > 50 && Humidity < 60)
+        else if (humidity > 50 && humidity < 60)
         {
             humidityIcon = "fa-thumbs-up";
             humidityColor = "#ffe278";
         }
-        else if (Humidity >= 60 && Humidity <= 80)
+        else if (humidity >= 60 && humidity <= 80)
         {
             humidityIcon = "fa-thumbs-down";
             humidityColor = "#ffcf78";
         }
-        else if (Humidity > 80)
+        else if (humidity > 80)
         {
             humidityIcon = "fa-volcano";
             humidityColor = "#ff5c57";
@@ -194,17 +177,20 @@
         unitDistance = await LocalStorage.GetItemAsStringAsync("unit_distance");
 
         // Air Pressure
-        if (AirPressure >= 1020)
+        airPressure = Weather.current.pressure_msl;
+        airPressureUnit = Weather.current_units.pressure_msl;
+
+        if (airPressure >= 1020)
         {
             airPressureIcon = "fa-circle-up";
             airPressureColor = "#bbfcc0";
         }
-        else if (AirPressure < 1020 && AirPressure >= 1000)
+        else if (airPressure < 1020 && airPressure >= 1000)
         {
             airPressureIcon = "fa-thumbs-up";
             airPressureColor = "#bbfcc0";
         }
-        else if (AirPressure < 1000)
+        else if (airPressure < 1000)
         {
             airPressureIcon = "fa-circle-down";
             airPressureColor = "#ADF3FD";
@@ -232,17 +218,18 @@
             UvIndexDescription = "Extreme";
         }
         // Wind
-        parsedDirection = await _repo.ParseDegree(WindDirection);
+        parsedDirection = await _repo.ParseDegree(Weather.current.wind_direction_10m);
 
         // Sunrise/Sunset
-        DateTime rawSunrise = DateTime.Parse($"{Sunrise}", null, System.Globalization.DateTimeStyles.RoundtripKind);
-        DateTime rawSunset = DateTime.Parse($"{Sunset}", null, System.Globalization.DateTimeStyles.RoundtripKind);
+        isDay = Weather.current.is_day;
+        DateTime rawSunrise = DateTime.Parse($"{Weather.daily.sunrise.FirstOrDefault()}", null, System.Globalization.DateTimeStyles.RoundtripKind);
+        DateTime rawSunset = DateTime.Parse($"{Weather.daily.sunset.FirstOrDefault()}", null, System.Globalization.DateTimeStyles.RoundtripKind);
 
-        if (IsDay == 1)
+        if (isDay == 1)
         {
             convertedSunset = rawSunset.ToString("hh:mm tt");
         }
-        else if (IsDay == 0)
+        else if (isDay == 0)
         {
             convertedSunrise = rawSunrise.ToString("hh:mm tt");
         }
@@ -253,13 +240,13 @@
         TimeSpan rawTimeToSunriseOrSunset = default;
         TimeSpan timeFromSunriseToSunset = rawSunset - rawSunrise;
 
-        if (IsDay == 1)
+        if (isDay == 1)
         {
             rawTimeToSunriseOrSunset = rawSunset - DateTime.Now;
             convertedSunset = rawSunset.ToString("hh:mm tt");
             minutesFromSunriseToSunset = Math.Abs(timeFromSunriseToSunset.TotalMinutes);
         }
-        else if (IsDay == 0)
+        else if (isDay == 0)
         {
             rawTimeToSunriseOrSunset = rawSunrise - DateTime.Now.AddHours(-24);
             convertedSunrise = rawSunrise.ToString("hh:mm tt");

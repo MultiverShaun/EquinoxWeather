@@ -5,8 +5,8 @@
 	</div>
 
 <div id="detail-grid">
-    <div <!-- class="detail-grid-tile" -->
-        <AdvancedInfoBox LocationTime="@(locationTime)" TimeZone="@(Weather.timezone)" PrecipitationChance="@(precipitationChance)" UvIndex="@(uvIndex)" AirPressure="@Weather.current.pressure_msl" AirPressureUnit="@Weather.current_units.pressure_msl" Humidity="@Weather.current.relative_humidity_2m" DewPoint="@dewPoint" TempUnit="@Weather.current_units.temperature_2m" CloudCover="@Weather.current.cloud_cover" Visibility="@visibility" WindSpeed="@Weather.current.wind_speed_10m" WindSpeedUnit="@Weather.current_units.wind_speed_10m" WindDirection="@Weather.current.wind_direction_10m" Sunrise="@Weather.daily.sunrise.FirstOrDefault()" Sunset="@Weather.daily.sunset.FirstOrDefault()" IsDay="@Weather.current.is_day" />
+    <div>
+        <AdvancedInfoBox LocationTime="@(locationTime)" TimeZone="@(Weather.timezone)" Weather="@Weather" PrecipitationChance="@(precipitationChance)" UvIndex="@(uvIndex)" DewPoint="@dewPoint" Visibility="@visibility" />
     </div>
     
     <div class="detail-grid-tile">
