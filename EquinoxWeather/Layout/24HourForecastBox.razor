@@ -5,8 +5,8 @@
     @for (int index = CurrentHour; index <= CurrentHour + 23; index++){
         <HourlyForecast CurrentHour="@(index)" Weather="@Weather" />
     }
-
 </div>
+<div style="text-align: center; padding-top: 5px;"><i class="fas fa-info-circle"></i> Click on a time for more info.</div>
 
 @code {
     [Parameter]
