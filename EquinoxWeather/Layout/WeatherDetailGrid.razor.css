@@ -18,6 +18,7 @@
     padding: 1rem;
     border-radius: 2rem;
     backdrop-filter: blur(1.5rem);
+    -webkit-backdrop-filter: blur(1.5rem);
     transition: all 0.3s ease;
 }
 
@@ -28,6 +29,7 @@
 
 .hour-forecast-box {
     margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
 }
 
 .aqi-box {
