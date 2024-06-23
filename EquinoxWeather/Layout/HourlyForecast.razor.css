@@ -8,8 +8,8 @@
     padding: 1rem;
     border-radius: 1rem;
     transition: all 0.3s ease;
-
     text-align: center;
+    cursor: pointer;
 }
 
     .hourly-forecast-card:hover {

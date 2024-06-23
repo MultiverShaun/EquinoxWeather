@@ -1,9 +1,42 @@
-﻿<h2 style="text-align: center;"><i class="fas fa-calendar-day fa-sm"></i> 24-Hour Forecast</h2>
+﻿@inject IRepository _repo
+
+<h2 style="text-align: center;"><i class="fas fa-calendar-day fa-sm"></i> 24-Hour Forecast</h2>
 
 <div class="hour-forecast-list">
+    @foreach (var hourData in hourlyForecasts)
+    {
+        <div class="hourly-forecast-card" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index)">
+            <h5 class="hour">@hourData.TimeDisplay</h5>
+            <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="48px" height="48px" />
+            <div class="precip-chance"><i class="fas fa-umbrella"></i> @hourData.PrecipChance%</div>
+            <div class="temperature">@hourData.Temperature@hourData.TemperatureUnit</div>
+        </div>
 
-    @for (int index = CurrentHour; index <= CurrentHour + 23; index++){
-        <HourlyForecast CurrentHour="@(index)" Weather="@Weather" />
+        <!-- Modal -->
+        <div class="modal fade" id="hourModal@(hourData.Index)" tabindex="-1" aria-labelledby="hourModal@(hourData.Index)Label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark hour-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 hour-modal-title" id="hourModal@(hourData.Index)Label">@hourData.TimeDisplay Weather</h1>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="64px" height="64px" />
+                        <h1>@hourData.WeatherDescription</h1>
+                        <div>
+                            @hourData.Temperature@hourData.TemperatureUnit <span style="color: #dddddd;">(Feels like @hourData.TemperatureApparent@hourData.TemperatureUnit)</span>
+                        </div>
+                        <div class="precip-chance">
+                            <i class="fas fa-umbrella"></i> @hourData.PrecipChance%
+                            <span class="px-1"></span>
+                            <i class="fas fa-droplet"></i> @hourData.Humidity%
+                            <span class="px-1"></span>
+                            <i class="fas fa-sun"></i> @hourData.UVIndex
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 </div>
 <div style="text-align: center; padding-top: 5px;"><i class="fas fa-info-circle"></i> Click on a time for more info.</div>
@@ -11,7 +44,70 @@
 @code {
     [Parameter]
     public OpenMeteoResponse? Weather { get; set; }
+
     [Parameter]
     public int CurrentHour { get; set; }
 
+    private List<HourlyForecastData> hourlyForecasts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Weather != null)
+        {
+            var tasks = new List<Task<HourlyForecastData>>();
+            for (int index = CurrentHour; index <= CurrentHour + 23; index++)
+            {
+                tasks.Add(GetHourlyForecastData(index));
+            }
+            hourlyForecasts = (await Task.WhenAll(tasks)).ToList();
+        }
+    }
+
+    private async Task<HourlyForecastData> GetHourlyForecastData(int index)
+    {
+        var forecast = Weather.hourly;
+        var temperature = Convert.ToInt32(forecast.temperature_2m[index]);
+        var temperatureApparent = Convert.ToInt32(forecast.apparent_temperature[index]);
+        var temperatureUnit = Weather.hourly_units.temperature_2m;
+        var precipChance = forecast.precipitation_probability[index];
+        var isDay = forecast.is_day[index];
+        var weatherCode = forecast.weather_code[index];
+        var currentHourModulo = index % 24;
+        var timeDisplay = currentHourModulo == 0 ? "12AM" :
+                          currentHourModulo == 12 ? "12PM" :
+                          currentHourModulo < 12 ? $"{currentHourModulo}AM" :
+                          $"{currentHourModulo - 12}PM";
+
+        var weatherStatus = await _repo.GetWeatherCodeInfo(weatherCode);
+        var weatherIcon = isDay == 1 ? weatherStatus.WeatherIconDay() : weatherStatus.WeatherIconNight();
+        var weatherDescription = weatherStatus.CodeDescription();
+
+        return new HourlyForecastData
+            {
+                Index = index,
+                TimeDisplay = timeDisplay,
+                Temperature = temperature,
+                TemperatureApparent = temperatureApparent,
+                TemperatureUnit = temperatureUnit,
+                PrecipChance = precipChance,
+                WeatherIcon = weatherIcon,
+                WeatherDescription = weatherDescription,
+                Humidity = forecast.relative_humidity_2m[index],
+                UVIndex = forecast.uv_index[index]
+            };
+    }
+
+    private class HourlyForecastData
+    {
+        public int Index { get; set; }
+        public string TimeDisplay { get; set; }
+        public int Temperature { get; set; }
+        public int TemperatureApparent { get; set; }
+        public string TemperatureUnit { get; set; }
+        public int PrecipChance { get; set; }
+        public string WeatherIcon { get; set; }
+        public string WeatherDescription { get; set; }
+        public int Humidity { get; set; }
+        public double UVIndex { get; set; }
+    }
 }

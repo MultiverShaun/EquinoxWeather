@@ -19,7 +19,7 @@
     border-radius: 1rem;
     padding: 2px 5px 3px 5px;
     transition: all 0.3s ease;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
     .more-info:hover {
