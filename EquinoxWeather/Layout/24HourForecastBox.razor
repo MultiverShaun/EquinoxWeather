@@ -3,7 +3,7 @@
 <div class="hour-forecast-list">
 
     @for (int index = CurrentHour; index <= CurrentHour + 23; index++){
-        <HourlyForecast CurrentHour="@(index)" IsDay="@Weather.hourly.is_day[index]" Temperature="@Convert.ToInt32(Weather.hourly.temperature_2m[index])" TemperatureApparent="@Convert.ToInt32(Weather.hourly.apparent_temperature[index])" TemperatureUnit="@(Weather.hourly_units.temperature_2m)" WeatherCode="@Weather.hourly.weather_code[index]" />
+        <HourlyForecast CurrentHour="@(index)" Weather="@Weather" />
     }
 
 </div>
