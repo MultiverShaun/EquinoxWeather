@@ -1,45 +1,56 @@
 ﻿@inject IRepository _repo
 
-<h2 style="text-align: center;"><i class="fas fa-calendar-day fa-sm"></i> 24-Hour Forecast</h2>
 
-<div class="hour-forecast-list">
-    @foreach (var hourData in hourlyForecasts)
-    {
-        <div class="hourly-forecast-card" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index)">
-            <h5 class="hour">@hourData.TimeDisplay</h5>
-            <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="48px" height="48px" />
-            <div class="precip-chance"><i class="fas fa-umbrella"></i> @hourData.PrecipChance%</div>
-            <div class="temperature">@hourData.Temperature@hourData.TemperatureUnit</div>
-        </div>
+<div class="detail-grid-tile hour-forecast-box">
+    <h2 style="text-align: center;"><i class="fas fa-calendar-day fa-sm"></i> 24-Hour Forecast</h2>
+    <div class="hour-forecast-list">
+        @foreach (var hourData in hourlyForecasts)
+        {
+            <div class="hourly-forecast-card" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index)">
+                <h5 class="hour">@hourData.TimeDisplay</h5>
+                <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="48px" height="48px" />
+                <div class="precip-chance"><i class="fas fa-umbrella"></i> @hourData.PrecipChance%</div>
+                <div class="temperature">@hourData.Temperature@hourData.TemperatureUnit</div>
+            </div>
+        }
+    </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="hourModal@(hourData.Index)" tabindex="-1" aria-labelledby="hourModal@(hourData.Index)Label" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content bg-dark hour-modal">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5 hour-modal-title" id="hourModal@(hourData.Index)Label">@hourData.TimeDisplay Weather</h1>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div style="text-align: center; padding-top: 5px;"><i class="fas fa-info-circle"></i> Click on a time for more info.</div>
+</div>
+
+@foreach (var hourData in hourlyForecasts)
+{
+    <!-- Modal -->
+    <div class="modal fade" id="hourModal@(hourData.Index)" tabindex="-1" aria-labelledby="hourModal@(hourData.Index)Label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark hour-modal">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 hour-modal-title" id="hourModal@(hourData.Index)Label"><i class="fas fa-clock"><span class="px-1"></span></i>@hourData.TimeDisplay</h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="64px" height="64px" />
+                    <h1>@hourData.WeatherDescription</h1>
+                    <div>
+                        @hourData.Temperature@hourData.TemperatureUnit <span style="color: #dddddd;">(Feels like @hourData.TemperatureApparent@hourData.TemperatureUnit)</span>
                     </div>
-                    <div class="modal-body">
-                        <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="64px" height="64px" />
-                        <h1>@hourData.WeatherDescription</h1>
-                        <div>
-                            @hourData.Temperature@hourData.TemperatureUnit <span style="color: #dddddd;">(Feels like @hourData.TemperatureApparent@hourData.TemperatureUnit)</span>
-                        </div>
-                        <div class="precip-chance">
-                            <i class="fas fa-umbrella"></i> @hourData.PrecipChance%
-                            <span class="px-1"></span>
-                            <i class="fas fa-droplet"></i> @hourData.Humidity%
-                            <span class="px-1"></span>
-                            <i class="fas fa-sun"></i> @hourData.UVIndex
-                        </div>
+                    <div class="precip-chance">
+                        <i class="fas fa-umbrella"></i> @hourData.PrecipChance%
+                        <span class="px-1"></span>
+                        <i class="fas fa-droplet"></i> @hourData.Humidity%
+                        <span class="px-1"></span>
+                        <i class="fas fa-sun"></i> @hourData.UVIndex
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index-1)">Previous</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index+1)">Next</button>
                 </div>
             </div>
         </div>
-    }
-</div>
-<div style="text-align: center; padding-top: 5px;"><i class="fas fa-info-circle"></i> Click on a time for more info.</div>
+    </div>
+}
 
 @code {
     [Parameter]

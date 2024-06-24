@@ -1,4 +1,8 @@
-﻿.hour-forecast-list {
+﻿.hour-forecast-box {
+    padding-bottom: 0.5rem;
+}
+
+.hour-forecast-list {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
@@ -31,19 +35,4 @@
     border-radius: 1.5rem;
     border: 2px solid rgb(255, 255, 255, 0.2);
     text-align: center;
-}
-
-.modal-dialog {
-    position: fixed;
-    margin: 0.5rem;
-    top: 50%;
-    left: 50%;
-    min-width: 300px;
-    transform: translate(-50%, -53%) !important;
-}
-
-@media (max-width: 512px) {
-    .modal-dialog {
-        min-width: 90%;
-    }
 }

@@ -1,12 +1,6 @@
-﻿@inject IRepository _repo
-
-	<div class="detail-grid-tile hour-forecast-box">
-        <_24HourForecastBox Weather="@Weather" CurrentHour="@(timeInHours)" />
-	</div>
-
-<div id="detail-grid">
+﻿<div id="detail-grid">
     <div>
-        <AdvancedInfoBox LocationTime="@(locationTime)" TimeZone="@(Weather.timezone)" Weather="@Weather" PrecipitationChance="@(precipitationChance)" UvIndex="@(uvIndex)" DewPoint="@dewPoint" Visibility="@visibility" />
+        <AdvancedInfoBox LocationTime="@(LocationTime)" TimeZone="@(Weather.timezone)" Weather="@Weather" PrecipitationChance="@(precipitationChance)" UvIndex="@(uvIndex)" DewPoint="@dewPoint" Visibility="@visibility" />
     </div>
     
     <div class="detail-grid-tile">
@@ -30,7 +24,8 @@
     public double Lat { get; set; }
     [Parameter]
     public double Lon { get; set; }
-    private string locationTime = "";
+    [Parameter]
+    public string ? LocationTime { get; set; }
     private int timeInHours = 0;
     private int precipitationChance = 0;
     private int uvIndex = 0;
@@ -39,9 +34,6 @@
 
     protected async override Task OnInitializedAsync()
     {
-        DateTime apiTime = await _repo.GetTimeZoneInfo(Weather.timezone);
-        timeInHours = apiTime.Hour;
-        locationTime = apiTime.ToString("hh:mm tt");
 
         precipitationChance = Weather.hourly.precipitation_probability[timeInHours];
         uvIndex = Convert.ToInt32(Weather.hourly.uv_index[timeInHours]);
