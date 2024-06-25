@@ -13,19 +13,19 @@ namespace EquinoxWeather.Services.Managers.WeatherCodes
 		{
 			return "Snow Grains";
 		}
-		public string DayPhotoCreditUrl()
-		{
-			return "https://unsplash.com/photos/white-and-brown-tree-illustation-NGB9oBtOUM8";
-		}
-		public string DayPhotoDirectUrl()
-		{
-			return "weather_backgrounds/snow_grains.webp";
-		}
-		public string DayPhotoAuthorName()
-		{
-			return "Click and Learn Photography";
-		}
-		public string NightPhotoCreditUrl()
+        public string DayPhotoCreditUrl()
+        {
+            return "https://unsplash.com/photos/photography-of-snow-covered-mountain-at-daytime-0vw4InAC-yM";
+        }
+        public string DayPhotoDirectUrl()
+        {
+            return "weather_backgrounds/snow.webp";
+        }
+        public string DayPhotoAuthorName()
+        {
+            return "Wladislaw Sokolowskij";
+        }
+        public string NightPhotoCreditUrl()
 		{
 			return "https://unsplash.com/photos/a-mountain-covered-in-snow-under-a-cloudy-sky-1T97FaKvno8";
 		}
