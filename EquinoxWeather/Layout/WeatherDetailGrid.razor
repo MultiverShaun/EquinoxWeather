@@ -1,6 +1,6 @@
 ﻿<div id="detail-grid">
     <div>
-        <AdvancedInfoBox LocationTime="@(LocationTime)" TimeZone="@(Weather.timezone)" Weather="@Weather" PrecipitationChance="@(precipitationChance)" UvIndex="@(uvIndex)" DewPoint="@dewPoint" Visibility="@visibility" />
+        <AdvancedInfoBox LocationTime="@(locationTime)" TimeZone="@(Weather.timezone)" Weather="@Weather" PrecipitationChance="@(precipitationChance)" UvIndex="@(uvIndex)" DewPoint="@dewPoint" Visibility="@visibility" />
     </div>
     
     <div class="detail-grid-tile">
@@ -25,8 +25,10 @@
     [Parameter]
     public double Lon { get; set; }
     [Parameter]
-    public string ? LocationTime { get; set; }
+    public DateTime ApiTime { get; set; }
+
     private int timeInHours = 0;
+    private string locationTime = "";
     private int precipitationChance = 0;
     private int uvIndex = 0;
     private int dewPoint = 0;
@@ -34,6 +36,8 @@
 
     protected async override Task OnInitializedAsync()
     {
+        timeInHours = ApiTime.Hour;
+        locationTime = ApiTime.ToString("hh:mm tt");
 
         precipitationChance = Weather.hourly.precipitation_probability[timeInHours];
         uvIndex = Convert.ToInt32(Weather.hourly.uv_index[timeInHours]);
