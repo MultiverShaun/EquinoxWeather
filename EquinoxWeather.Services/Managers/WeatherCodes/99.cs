@@ -12,44 +12,44 @@ namespace EquinoxWeather.Services.Managers.WeatherCodes
 	{
 		public string CodeDescription()
 		{
-			return "Heavy Hail";
+			return "Thunderstorms, Hail";
 		}
 		public string DayPhotoCreditUrl()
 		{
-			return "https://unsplash.com/photos/white-and-gray-stones-on-ground-ERMeJ51f-Ik";
+			return "https://unsplash.com/photos/black-and-white-abstract-painting-sCrqMG2f6qo";
 		}
 		public string DayPhotoDirectUrl()
 		{
-			return "weather_backgrounds/hail.webp";
+			return "weather_backgrounds/thunderstorm.webp";
 		}
 		public string DayPhotoAuthorName()
 		{
-			return "Cody A";
+			return "Michelle McEwen";
 		}
 		public string NightPhotoCreditUrl()
 		{
-			return "https://unsplash.com/photos/white-and-black-abstract-painting-pWIYmeO0x-s";
+			return "https://unsplash.com/photos/black-and-white-abstract-painting-sCrqMG2f6qo";
 		}
 		public string NightPhotoDirectUrl()
 		{
-			return "weather_backgrounds/hail_night.webp";
+			return "weather_backgrounds/thunderstorm.webp";
 		}
 		public string NightPhotoAuthorName()
 		{
-			return "Marcel Strauß";
+			return "Michelle McEwen";
 		}
 		public bool FromUnsplash()
 		{
 			return true;
-        }
-        public string WeatherIconDay()
-        {
-            return "weather_icons/hail.svg";
-        }
+		}
+		public string WeatherIconDay()
+		{
+			return "weather_icons/thunderstorm.svg";
+		}
 
-        public string WeatherIconNight()
-        {
-            return "weather_icons/hail.svg";
-        }
-    }
+		public string WeatherIconNight()
+		{
+			return "weather_icons/thunderstorm.svg";
+		}
+	}
 }

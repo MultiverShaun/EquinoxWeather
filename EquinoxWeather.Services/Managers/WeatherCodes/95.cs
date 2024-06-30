@@ -11,7 +11,7 @@ namespace EquinoxWeather.Services.Managers.WeatherCodes
 	{
 		public string CodeDescription()
 		{
-			return "Thunderstorm";
+			return "Thunderstorms";
 		}
 		public string DayPhotoCreditUrl()
 		{
