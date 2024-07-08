@@ -24,12 +24,4 @@
     <ProjectReference Include="..\EquinoxWeather.Services\EquinoxWeather.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Layout\CitySearch.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Layout\CitySearch.razor" />
-  </ItemGroup>
-
 </Project>
