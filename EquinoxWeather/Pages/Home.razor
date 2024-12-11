@@ -6,26 +6,29 @@
 
 <PageTitle>Equinox · @cityName@(string.IsNullOrEmpty(countryName) ? "" : ", ")@countryName</PageTitle>
 
-@if (isDataLoaded){
 
 	<div class="navigation px-4">
 		<NavMenu Temperature="@roundedTemperature" WeatherIcon="@weatherIcon" />
 	</div>
 
-	<style>
+<style>
 
-		.content {
-			background-image: url('@(photoDirectUrl)');
-			@* background-image: url('weather_backgrounds/partly_cloudy_night.webp'); *@
-			background-size: cover;
-			background-position: center;
-			min-height: 100vh;
-			color: white;
-			padding-top: calc(5% + 70px);
-			padding-bottom: 10px;
-		}
+	.content {
+		background-color: #001524;
+		background-image: url('@(photoDirectUrl)');
+		@* background-image: url('weather_backgrounds/partly_cloudy_night.webp'); *@
+		background-size: cover;
+		background-position: center;
+		min-height: 100vh;
+		color: white;
+		padding-top: calc(5% + 70px);
+		padding-bottom: 10px;
+	}
 
-	</style>
+</style>
+
+@if (isDataLoaded){
+
 	<div class="weather-main">
 		<h1 class="location" id="location">@cityName@(string.IsNullOrEmpty(countryName) ? "" : ", ")@countryName</h1>
 		<div class="temperature-container">
@@ -100,15 +103,6 @@
 }
 else
 {
-	<svg width="192px" height="192px" class="logo">
-		<image xlink:href="logo.svg" width="192" height="192" />
-	</svg>
-
-	<div style="text-align: center; max-width: 75%; margin: auto;">
-		<h1 class="equinox-title">Equinox Weather</h1>
-		<h3>by MultiverShaun</h3>
-	</div>
-
 	<div class="d-flex justify-content-center" style="padding-top: 5%">
 		<div class="spinner-border" role="status">
 			<span class="visually-hidden">Loading...</span>

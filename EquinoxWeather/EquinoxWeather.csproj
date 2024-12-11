@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Content Remove="Layout\CitySearch.razor" />
+    <Content Remove="Pages\CitySearch.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,18 @@
   <ItemGroup>
     <ProjectReference Include="..\EquinoxWeather.Infrastructure\EquinoxWeather.Infrastructure.csproj" />
     <ProjectReference Include="..\EquinoxWeather.Services\EquinoxWeather.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\CitySearch.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\CitySearch.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\CitySearch.razor" />
   </ItemGroup>
 
 </Project>
