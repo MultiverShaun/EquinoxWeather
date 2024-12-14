@@ -15,7 +15,7 @@ namespace EquinoxWeather.Services.Managers.WeatherCodes
 		}
 		public string DayPhotoCreditUrl()
 		{
-			return "https://unsplash.com/photos/photo-of-white-clouds-V4qjYCac7y8";
+			return "https://unsplash.com/photos/a-plane-flying-through-a-cloudy-blue-sky-Raiv2kwI_7Y";
 		}
 		public string DayPhotoDirectUrl()
 		{
@@ -23,7 +23,7 @@ namespace EquinoxWeather.Services.Managers.WeatherCodes
 		}
 		public string DayPhotoAuthorName()
 		{
-			return "Artem Anokhin";
+			return "engin akyurt";
 		}
 		public string NightPhotoCreditUrl()
 		{

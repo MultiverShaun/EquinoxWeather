@@ -15,7 +15,7 @@ namespace EquinoxWeather.Services.Managers.WeatherCodes
 		}
 		public string DayPhotoCreditUrl()
 		{
-			return "https://unsplash.com/photos/cloudy-sky-during-daytime-E9aetBe2w40";
+			return "https://unsplash.com/photos/white-clouds-and-blue-sky-gO11ZsNpCHk";
 		}
 		public string DayPhotoDirectUrl()
 		{
@@ -23,7 +23,7 @@ namespace EquinoxWeather.Services.Managers.WeatherCodes
 		}
 		public string DayPhotoAuthorName()
 		{
-			return "Sam Schooler";
+			return "Monica Toner";
 		}
         public string NightPhotoCreditUrl()
         {
