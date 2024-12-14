@@ -1,7 +1,7 @@
 nav {
     border-radius: 1.5rem;
     margin: calc(0.5% + 5px) auto 0;
-    padding: 0.75% 0 0.75% calc(0.5% + 10px);
+    padding: 0.6% 0 0.6% calc(0.5% + 10px);
     max-width: 600px;
     display: flex;
     flex-wrap: nowrap;
@@ -86,7 +86,18 @@ nav {
     background-color: rgb(255, 255, 255, 0.1);
     border: 1px solid rgb(255, 255, 255, 0.2);
     color: white;
+    animation: fadeIn 0.1s;
 }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
 
     .suggestions-list li {
         padding: 10px; /* Adjust padding as needed */
