@@ -7,22 +7,22 @@
 <PageTitle>Equinox · @cityName@(string.IsNullOrEmpty(countryName) ? "" : ", ")@countryName</PageTitle>
 
 
-	<div class="navigation px-4">
-		<NavMenu Temperature="@roundedTemperature" WeatherIcon="@weatherIcon" />
-	</div>
+<div class="navigation px-4">
+	<NavMenu Temperature="@roundedTemperature" WeatherIcon="@weatherIcon" />
+</div>
 
 <style>
 
 	.content {
-		background-color: #001524;
-		background-image: url('@(photoDirectUrl)');
-		@* background-image: url('weather_backgrounds/partly_cloudy_night.webp'); *@
-		background-size: cover;
-		background-position: center;
-		min-height: 100vh;
-		color: white;
-		padding-top: calc(5% + 70px);
-		padding-bottom: 10px;
+	background-color: #001524;
+	background-image: url('@(photoDirectUrl)');
+	@* background-image: url('weather_backgrounds/partly_cloudy_night.webp'); *@
+	background-size: cover;
+	background-position: center;
+	min-height: 100vh;
+	color: white;
+	padding-top: calc(5% + 70px);
+	padding-bottom: 10px;
 	}
 
 </style>
@@ -56,10 +56,10 @@
 				}
 			</a>
 		</div>
-		
+
 	</div>
 
-	<_24HourForecastBox Weather="@Weather" CurrentHour="@(timeInHours)" />
+	<HourlyForecastBox Weather="@Weather" CurrentHour="@(timeInHours)" DayOfMonth="@dayOfMonth" Month="@month"/>
 
 	<div class="weather-detail-grid">
 		<WeatherDetailGrid Weather="@Weather" WeatherStatus="@weatherStatus" WeatherIcon="@weatherIcon" Lat="@(Lat * 0.0001)" Lon="@(Lon * 0.0001)" ApiTime="@apiTime"/>
@@ -140,6 +140,8 @@ else
 	private int roundedMinTemp = 0;
 	private string locationTime = "";
 	private int timeInHours = 0;
+	private int dayOfMonth = 0;
+	private int month = 0;
 
 	private string photoCreditUrl = "";
 	private string photoDirectUrl = "";
@@ -193,6 +195,8 @@ else
 
 		apiTime = await _repo.GetTimeZoneInfo(Weather.timezone);
 		timeInHours = apiTime.Hour;
+		dayOfMonth = apiTime.Day;
+		month = apiTime.Month;
 		locationTime = apiTime.ToString("hh:mm tt");
 
 		isDataLoaded = true;

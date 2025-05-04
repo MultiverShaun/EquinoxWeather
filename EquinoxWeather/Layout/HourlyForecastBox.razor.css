@@ -1,22 +1,23 @@
-﻿.hour-forecast-box {
-    margin-top: 1rem;
-    padding-bottom: 0.5rem;
-}
-
-.hour-forecast-list {
+﻿.hour-forecast-list {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
 }
-
+.hour {
+    font-weight: 500;
+}
+.date {
+    color: #dddddd;
+}
 .hourly-forecast-card {
-    width: 5rem; /* Set card width */
-    height: 155px; /* Set card height */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center; /* Center elements vertically */
+    align-items: center;
     margin-right: 0.5rem; /* Adjust margin between cards */
-
-    background-color: rgb(255, 255, 255, 0.1);
-    border: 1px solid rgb(255, 255, 255, 0.2);
-    padding: 1rem;
+    background-color: rgb(192, 192, 192, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1rem;
     border-radius: 1rem;
     transition: all 0.3s ease;
     text-align: center;
@@ -24,13 +25,9 @@
 }
 
     .hourly-forecast-card:hover {
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(192, 192, 192, 0.3);
         border: 1px solid rgba(255, 255, 255, 0.3);
     }
-
-.precip-chance {
-    color: #b8f5ff;
-}
 
 .hour-modal {
     border-radius: 1.5rem;
