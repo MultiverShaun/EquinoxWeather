@@ -13,13 +13,7 @@
                     <span class=date>@(hourData.MonthDisplay)/@(hourData.DayDisplay)</span>
                 </span>
                 <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="40px" height="40px" />
-                @if (hourData.HasPrecip == true)
-                {
-                    <div class="temperature" style="color:#b8f5ff;"><i class="fas fa-umbrella"></i> @(hourData.Temperature)°</div>
-                }
-                else
-                {
-                    <div class="temperature">@(hourData.Temperature)°</div>
+                <div class="temperature">@(hourData.Temperature)@(hourData.TemperatureUnit)</div>
                 }
             </div>
         }
@@ -99,24 +93,11 @@
         var precipChance = forecast.precipitation_probability[index];
         var isDay = forecast.is_day[index];
         var weatherCode = forecast.weather_code[index];
-        var hasPrecip = false;
-        if (weatherCode == 51 || weatherCode == 53 || weatherCode == 55 || weatherCode == 61 || weatherCode == 63 || weatherCode == 65 || weatherCode == 66 || weatherCode == 67 || weatherCode == 70 || weatherCode == 73 || weatherCode == 75 || weatherCode == 77 || weatherCode == 80 || weatherCode == 81 || weatherCode == 82 || weatherCode == 85 || weatherCode == 86 || weatherCode == 95 || weatherCode == 96 || weatherCode == 99)
-        {
-            hasPrecip = true;
-        }
-        else
-        {
-            hasPrecip = false;
-        }
 
-        // Base date and time using DateTime
+        // Time and day
         var baseDate = new DateTime(DateTime.Now.Year, Month, DayOfMonth, CurrentHour, 0, 0, DateTimeKind.Local);
         var forecastDate = baseDate.AddHours(index - CurrentHour);
-
-        // Format the time display using DateTime
         var timeDisplay = forecastDate.ToString("htt").ToUpper(); // e.g., "12AM", "1PM"
-
-        // Extract day and month for display
         var dayDisplay = forecastDate.Day;
         var monthDisplay = forecastDate.Month;
 
@@ -135,7 +116,6 @@
                 TemperatureUnit = temperatureUnit,
                 PrecipChance = precipChance,
                 WeatherIcon = weatherIcon,
-                HasPrecip = hasPrecip,
                 WeatherDescription = weatherDescription,
                 Humidity = forecast.relative_humidity_2m[index],
                 UVIndex = forecast.uv_index[index]
@@ -153,7 +133,6 @@
         public string TemperatureUnit { get; set; }
         public int PrecipChance { get; set; }
         public string WeatherIcon { get; set; }
-		public bool HasPrecip { get; set; }
         public string WeatherDescription { get; set; }
         public int Humidity { get; set; }
         public double UVIndex { get; set; }
