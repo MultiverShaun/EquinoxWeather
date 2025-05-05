@@ -17,9 +17,10 @@
     background-color: rgb(192, 192, 192, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 1rem;
-    padding: 2px 5px 3px 5px;
+    padding: 0.25rem 1rem;
     transition: all 0.3s ease;
     text-decoration: none;
+    color: #b8f5ff;
 }
 
     .more-info:hover {
