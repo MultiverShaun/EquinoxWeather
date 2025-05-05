@@ -38,25 +38,6 @@
 		<h2>@weatherStatus?.CodeDescription() @(roundedMaxTemp)°<span style="color: #dddddd;">/</span>@(roundedMinTemp)°</h2>
 
 		<h4 style="margin-bottom: 2rem;">Feels like <b>@roundedTemperatureApparent@Weather.current_units.apparent_temperature</b></h4>
-
-		<div class="photo-credits-container blur px-3 py-1 mx-auto">
-			<a class="photo-credits" href="@(photoCreditUrl)" target="_blank">
-				@if (weatherStatus.FromUnsplash())
-				{
-					<span>
-						<i class="fas fa-arrow-up-right-from-square"></i>
-						Photo by
-						@(photoAuthorName)
-						on Unsplash
-					</span>
-				}
-				else
-				{
-					<span>Photo by Developer</span>
-				}
-			</a>
-		</div>
-
 	</div>
 
 	<HourlyForecastBox Weather="@Weather" CurrentHour="@(timeInHours)" DayOfMonth="@dayOfMonth" Month="@month"/>
@@ -73,7 +54,19 @@
 				</svg>
 			</a>
 			<span class="mb-3 mb-md-0 me-4 fs-5">Equinox</span>
-			<span class="mb-3 mb-md-0">Data from OpenMeteo</span>
+			@if (weatherStatus.FromUnsplash())
+			{
+				<span class="footer-link-container photo-credits-container px-3 py-1 mb-3 mb-md-0">
+					<a class="photo-credits" href="@(photoCreditUrl)" target="_blank">
+						<span>
+							<i class="fas fa-camera"></i>
+							Credit: 
+							@(photoAuthorName)
+						</span>
+					</a>
+				</span>
+			}
+			else {}
 		</div>
 
 		<ul class="nav col-md-6 justify-content-end list-unstyled d-flex">

@@ -35,31 +35,8 @@
 
 .weather-detail-grid {
     /*backdrop-filter: blur(1.5rem);*/
-    padding-top: 1rem;
+    padding-top: 0.5rem;
 }
-
-.photo-credits-container {
-    text-align: center;
-    background-color: rgb(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 1rem;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 375px;
-}
-
-    .photo-credits-container:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-    }
-
-    .photo-credits {
-        color: #b8f5ff;
-        text-decoration: none;
-        font-weight: 500;
-    }
 
 .brand-link{
     font-size: 150%;
@@ -67,7 +44,7 @@
 }
 
 .footer-link-container {
-    background-color: rgb(255, 255, 255, 0.1);
+    background-color: rgb(192, 192, 192, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 1rem;
     transition: all 0.3s ease;
@@ -83,3 +60,15 @@
         text-decoration: none;
         font-weight: 500;
     }
+
+.photo-credits-container {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.photo-credits {
+    color: #b8f5ff;
+    text-decoration: none;
+    font-weight: 500;
+}
