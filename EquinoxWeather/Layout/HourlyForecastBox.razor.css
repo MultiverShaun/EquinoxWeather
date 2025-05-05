@@ -1,4 +1,8 @@
-﻿.hour-forecast-list {
+﻿.hour-forecast-box{
+    margin-top: 1rem;
+}
+
+.hour-forecast-list {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
@@ -33,4 +37,8 @@
     border-radius: 1.5rem;
     border: 2px solid rgb(255, 255, 255, 0.2);
     text-align: center;
+}
+
+.modal-stats {
+    color: #b8f5ff;
 }

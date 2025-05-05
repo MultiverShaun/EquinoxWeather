@@ -14,15 +14,15 @@
 <style>
 
 	.content {
-	background-color: #001524;
-	background-image: url('@(photoDirectUrl)');
-	@* background-image: url('weather_backgrounds/partly_cloudy_night.webp'); *@
-	background-size: cover;
-	background-position: center;
-	min-height: 100vh;
-	color: white;
-	padding-top: calc(5% + 70px);
-	padding-bottom: 10px;
+		background-color: #001524;
+		background-image: url('@(photoDirectUrl)');
+		@* background-image: url('weather_backgrounds/partly_cloudy_night.webp'); *@
+		background-size: cover;
+		background-position: center;
+		min-height: 100vh;
+		color: white;
+		padding-top: calc(5% + 70px);
+		padding-bottom: 10px;
 	}
 
 </style>
@@ -37,7 +37,7 @@
 		</div>
 		<h2>@weatherStatus?.CodeDescription() @(roundedMaxTemp)°<span style="color: #dddddd;">/</span>@(roundedMinTemp)°</h2>
 
-		<h4 style="margin-bottom: 2rem;">Feels like <b>@roundedTemperatureApparent@Weather.current_units.apparent_temperature</b></h4>
+		<h4>Feels like <b>@roundedTemperatureApparent@Weather.current_units.apparent_temperature</b></h4>
 	</div>
 
 	<HourlyForecastBox Weather="@Weather" CurrentHour="@(timeInHours)" DayOfMonth="@dayOfMonth" Month="@month"/>
@@ -46,7 +46,7 @@
 		<WeatherDetailGrid Weather="@Weather" WeatherStatus="@weatherStatus" WeatherIcon="@weatherIcon" Lat="@(Lat * 0.0001)" Lon="@(Lon * 0.0001)" ApiTime="@apiTime"/>
 	</div>
 
-	<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 pe-4 my-3">
+	<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 pe-4 my-2">
 		<div class="col-md-6 d-flex align-items-center">
 			<a href="/" class="mb-3 me-2 mb-md-0 ps-3 text-body-secondary text-decoration-none lh-1">
 				<svg width="40px" height="40px">

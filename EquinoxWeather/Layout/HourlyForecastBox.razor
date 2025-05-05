@@ -1,60 +1,66 @@
 ﻿@inject IRepository _repo
 
+@if (isDataLoaded){
+    <div class="detail-grid-tile app-tile hour-forecast-box">
+        <h2 style="text-align: center;"><i class="fas fa-calendar-day fa-sm"></i> Hourly Forecast</h2>
+        <div class="hour-forecast-list">
+            @foreach (var hourData in hourlyForecasts)
+            {
+                <div class="hourly-forecast-card" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index)">
+                    <span class="timedisplay">
+                        <span class="hour">@hourData.TimeDisplay</span>
+                        <br />
+                        <span class=date>@(hourData.MonthDisplay)/@(hourData.DayDisplay)</span>
+                    </span>
+                    <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="40px" height="40px" />
+                    <div class="temperature">@(hourData.Temperature)@(hourData.TemperatureUnit)</div>
+                </div>
+            }
+        </div>
 
-<div class="detail-grid-tile app-tile hour-forecast-box">
-    <h2 style="text-align: center;"><i class="fas fa-calendar-day fa-sm"></i> Hourly Forecast</h2>
-    <div class="hour-forecast-list">
-        @foreach (var hourData in hourlyForecasts)
-        {
-            <div class="hourly-forecast-card" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index)">
-                <span class="timedisplay">
-                    <span class="hour">@hourData.TimeDisplay</span>
-                    <br />
-                    <span class=date>@(hourData.MonthDisplay)/@(hourData.DayDisplay)</span>
-                </span>
-                <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="40px" height="40px" />
-                <div class="temperature">@(hourData.Temperature)@(hourData.TemperatureUnit)</div>
-            </div>
-        }
+        <div style="text-align: center; padding-top: 5px;"><i class="fas fa-info-circle"></i> Click on a time for more info.</div>
     </div>
 
-    <div style="text-align: center; padding-top: 5px;"><i class="fas fa-info-circle"></i> Click on a time for more info.</div>
-</div>
-
-@foreach (var hourData in hourlyForecasts)
-{
-    <!-- Modal -->
-    <div class="modal" id="hourModal@(hourData.Index)" tabindex="-1" aria-labelledby="hourModal@(hourData.Index)Label" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content bg-dark hour-modal">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5 hour-modal-title" id="hourModal@(hourData.Index)Label"><i class="fas fa-clock"><span class="px-1"></span></i>@hourData.TimeDisplay - @(hourData.MonthDisplay)/@(hourData.DayDisplay)</h1>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="64px" height="64px" />
-                    <h1>@hourData.WeatherDescription</h1>
-                    <div>
-                        @hourData.Temperature@hourData.TemperatureUnit <span style="color: #dddddd;">(Feels like @hourData.TemperatureApparent@hourData.TemperatureUnit)</span>
+    @foreach (var hourData in hourlyForecasts)
+    {
+        <!-- Modal -->
+        <div class="modal" id="hourModal@(hourData.Index)" tabindex="-1" aria-labelledby="hourModal@(hourData.Index)Label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark hour-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 hour-modal-title" id="hourModal@(hourData.Index)Label"><i class="fas fa-clock"><span class="px-1"></span></i>@hourData.TimeDisplay - @(hourData.MonthDisplay)/@(hourData.DayDisplay)</h1>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="precip-chance">
-                        <i class="fas fa-umbrella"></i> @hourData.PrecipChance%
-                        <span class="px-1"></span>
-                        <i class="fas fa-droplet"></i> @hourData.Humidity%
-                        <span class="px-1"></span>
-                        <i class="fas fa-sun"></i> @hourData.UVIndex
+                    <div class="modal-body">
+                        <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="64px" height="64px" />
+                        <h1>@hourData.WeatherDescription</h1>
+                        <div>
+                            @hourData.Temperature@hourData.TemperatureUnit <span style="color: #dddddd;">(Feels like @hourData.TemperatureApparent@hourData.TemperatureUnit)</span>
+                        </div>
+                        <div class="modal-stats">
+                            <i class="fas fa-umbrella"></i> @hourData.PrecipChance%
+                            <span class="px-1"></span>
+                            <i class="fas fa-droplet"></i> @hourData.Humidity%
+                            <span class="px-1"></span>
+                            <i class="fas fa-sun"></i> @hourData.UVIndex
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index-1)">Previous</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index+1)">Next</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index-1)">Previous</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index+1)">Next</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 }
-
+else
+{
+	<div class="loading-spinner">
+		<i class="fas fa-spinner fa-spin"></i> Loading...
+	</div>
+}
 @code {
     [Parameter]
     public OpenMeteoResponse? Weather { get; set; }
@@ -70,8 +76,11 @@
 
     private List<HourlyForecastData> hourlyForecasts = new();
 
+    private bool isDataLoaded = false;
+
     protected override async Task OnInitializedAsync()
     {
+        isDataLoaded = false;
         if (Weather != null)
         {
             var tasks = new List<Task<HourlyForecastData>>();
@@ -81,6 +90,7 @@
             }
             hourlyForecasts = (await Task.WhenAll(tasks)).ToList();
         }
+        isDataLoaded = true;
     }
 
     private async Task<HourlyForecastData> GetHourlyForecastData(int index)
