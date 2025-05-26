@@ -1,18 +1,28 @@
-﻿<div id="detail-grid">
-    <div>
-        <AdvancedInfoBox LocationTime="@(locationTime)" TimeZone="@(Weather.timezone)" Weather="@Weather" PrecipitationChance="@(precipitationChance)" UvIndex="@(uvIndex)" DewPoint="@dewPoint" Visibility="@visibility" />
+﻿@if (isDataLoaded)
+{
+    <div id="detail-grid">
+        <div>
+            <AdvancedInfoBox LocationTime="@(locationTime)" TimeZone="@(Weather.timezone)" Weather="@Weather" PrecipitationChance="@(precipitationChance)" UvIndex="@(uvIndex)" DewPoint="@dewPoint" Visibility="@visibility" />
+        </div>
+
+        <div class="detail-grid-tile app-tile">
+            <_7DayForecastBox Weather="@Weather" />
+        </div>
+
     </div>
-    
-    <div class="detail-grid-tile app-tile">
-        <_7DayForecastBox Weather="@Weather" />
+
+    <a class="detail-grid-tile app-tile aqi-box">
+        <AQIBox Lat="@Lat" Lon="@Lon"/>
+    </a>
+}
+else 
+{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
-
-</div>
-
-<a class="detail-grid-tile app-tile aqi-box">
-    <AQIBox Lat="@Lat" Lon="@Lon"/>
-</a>
-
+}
 @code {
     [Parameter]
     public OpenMeteoResponse? Weather { get; set; }
@@ -34,6 +44,8 @@
     private int dewPoint = 0;
     private double visibility = 0.0;
 
+    private bool isDataLoaded = false;
+
     protected async override Task OnInitializedAsync()
     {
         timeInHours = ApiTime.Hour;
@@ -43,6 +55,6 @@
         uvIndex = Convert.ToInt32(Weather.hourly.uv_index[timeInHours]);
         dewPoint = Convert.ToInt32(Weather.hourly.dew_point_2m[timeInHours]);
         visibility = Weather.hourly.visibility[timeInHours]/1000;
-
+        isDataLoaded = true;
     }
 }
