@@ -150,15 +150,6 @@
 
         // Update the CityState with the selected city's information
         await LocalStorage.SetItemAsStringAsync("city_name", suggestion.Name);
-        if (suggestion.Country == null)
-        {
-            await LocalStorage.SetItemAsStringAsync("country_name", "");
-        }
-        else
-        {
-            await LocalStorage.SetItemAsStringAsync("country_name", suggestion.Country);
-        }
-        
 
         // Convert coordinates
         int lat = Convert.ToInt32(suggestion.Latitude * 10000);

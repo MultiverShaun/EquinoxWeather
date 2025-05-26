@@ -4,7 +4,7 @@
 @inject IRepository _repo
 @inject ILocalStorageService LocalStorage
 
-<PageTitle>Equinox · @cityName@(string.IsNullOrEmpty(countryName) ? "" : ", ")@countryName</PageTitle>
+<PageTitle>Equinox · @cityName</PageTitle>
 
 
 <div class="navigation px-4">
@@ -21,6 +21,8 @@
 		background-position: center;
 		min-height: 100vh;
 		color: white;
+		padding-top: calc(1.7% + 4.5rem);
+		padding-bottom: 0.5rem;
 	}
 
 </style>
@@ -28,14 +30,24 @@
 @if (isDataLoaded){
 
 	<div class="weather-main">
-		<h1 class="location" id="location">@cityName@(string.IsNullOrEmpty(countryName) ? "" : ", ")@countryName</h1>
+		<h1 class="location" id="location">@cityName</h1>
 		<div class="temperature-container">
 			<h1 class="temperature">@(roundedTemperature)</h1>
 			<h1 class="degree-symbol">@Weather.current_units.temperature_2m</h1>
 		</div>
-		<h2>@weatherStatus?.CodeDescription() @(roundedMaxTemp)°<span style="color: #dddddd;">/</span>@(roundedMinTemp)°</h2>
 
-		<h4>Feels like <b>@roundedTemperatureApparent@Weather.current_units.apparent_temperature</b></h4>
+		<h4 class="feels-like">Feels like <b>@roundedTemperatureApparent@Weather.current_units.apparent_temperature</b></h4>
+
+		<div class="header-pill app-tile px-3 py-1 mt-2 mx-auto">
+			<span>
+				<img src="@(weatherIcon)" class="weather-icon" width="24px" height="24px" />
+				@weatherStatus?.CodeDescription()
+			</span>
+			<span style="border-left: 1.5px solid rgb(255, 255, 255, 0.2)" class="ms-1 me-2"></span>
+			<span>
+				<i class="fas fa-arrow-up"></i> @(roundedMaxTemp)° <i class="fas fa-arrow-down"></i> @(roundedMinTemp)°
+			</span>
+		</div>
 	</div>
 
 	<HourlyForecastBox Weather="@Weather" CurrentHour="@(timeInHours)" DayOfMonth="@dayOfMonth" Month="@month"/>
@@ -69,7 +81,7 @@
 
 		<ul class="nav col-md-6 justify-content-end list-unstyled d-flex pt-2 pt-sm-0">
 			<li class="ms-3 ps-1">
-				<a class="brand-link" href="https://github.com/MultiverShaun/EquinoxWeather">
+				<a class="github-link" href="https://github.com/MultiverShaun/EquinoxWeather">
 					<i class="fa-brands fa-github"></i>
 				</a>
 			</li>
@@ -104,7 +116,6 @@ else
 	private bool unitDistanceIsMph = false;
 
 	private string? cityName = "";
-	private string? countryName = "";
 
 	private IWeatherCode ? weatherStatus;
 
@@ -113,8 +124,6 @@ else
 	public OpenMeteoResponse Weather { get; set; } = new();
 
 	public DateTime apiTime { get; set; } = new();
-
-	private string descriptionEasterEgg = "";
 	private int roundedTemperature = 0;
 	private int roundedTemperatureApparent = 0;
 	private int roundedMaxTemp = 0;
@@ -160,11 +169,6 @@ else
 			photoAuthorName = weatherStatus.NightPhotoAuthorName();
 		}
 
-		if (weatherCode == 63)
-		{
-			descriptionEasterEgg = "Hindi ka ba nilalamig?";
-		}
-
 		if (Weather.current.is_day == 1)
 		{
 			weatherIcon = weatherStatus.WeatherIconDay();
@@ -188,7 +192,6 @@ else
 		string? UnitTemp = await LocalStorage.GetItemAsStringAsync("unit_temp");
 		string? UnitDistance = await LocalStorage.GetItemAsStringAsync("unit_distance");
 		cityName = await LocalStorage.GetItemAsStringAsync("city_name");
-		countryName = await LocalStorage.GetItemAsStringAsync("country_name");
 
 		if (UnitTemp == "f")
 		{

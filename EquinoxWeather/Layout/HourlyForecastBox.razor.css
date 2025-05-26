@@ -26,6 +26,7 @@
     transition: all 0.3s ease;
     text-align: center;
     cursor: pointer;
+    max-width: 4.5rem;
 }
 
     .hourly-forecast-card:hover {

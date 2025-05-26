@@ -21,16 +21,29 @@
 }
 
 .temperature {
-    font-size: 720%;
+    font-size: 8rem;
     margin: 0;
 }
 
 .degree-symbol {
-    font-size: 180%;
+    font-size: 2rem;
 }
 
 .location {
-    font-size: 240%
+    font-size: 3rem;
+}
+
+.feels-like {
+    font-weight: normal;
+    font-size: 1.5rem;
+}
+
+.header-pill {
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
 }
 
 .weather-detail-grid {
@@ -38,7 +51,7 @@
     padding-top: 0.5rem;
 }
 
-.brand-link{
+.github-link{
     font-size: 150%;
     color: #b8f5ff;
 }
