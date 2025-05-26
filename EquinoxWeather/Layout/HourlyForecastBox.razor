@@ -10,10 +10,10 @@
                     <span class="timedisplay">
                         <span class="hour">@hourData.TimeDisplay</span>
                         <br />
-                        <span class=date>@(hourData.MonthDisplay)/@(hourData.DayDisplay)</span>
                     </span>
                     <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="40px" height="40px" />
                     <div class="temperature">@(hourData.Temperature)@(hourData.TemperatureUnit)</div>
+                    <span class=precip-chance><i class="fas fa-umbrella"></i> @(hourData.PrecipChance)%</span>
                 </div>
             }
         </div>
@@ -84,7 +84,7 @@ else
         if (Weather != null)
         {
             var tasks = new List<Task<HourlyForecastData>>();
-            for (int index = CurrentHour; index <= CurrentHour + 96; index++)
+            for (int index = CurrentHour; index <= CurrentHour + 72; index++)
             {
                 tasks.Add(GetHourlyForecastData(index));
             }

@@ -10,8 +10,8 @@
 .hour {
     font-weight: 500;
 }
-.date {
-    color: #dddddd;
+.precip-chance {
+    color: #adf3fd;
 }
 .hourly-forecast-card {
     display: flex;
