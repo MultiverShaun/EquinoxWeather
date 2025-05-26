@@ -11,7 +11,7 @@
                         <span class="hour">@hourData.TimeDisplay</span>
                         <br />
                     </span>
-                    <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="40px" height="40px" />
+                    <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="40" height="40" />
                     <div class="temperature">@(hourData.Temperature)@(hourData.TemperatureUnit)</div>
                     <span class=precip-chance><i class="fas fa-umbrella"></i> @(hourData.PrecipChance)%</span>
                 </div>
@@ -32,7 +32,7 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="64px" height="64px" />
+                        <img src="@hourData.WeatherIcon" alt="Weather Icon" class="weather-icon" width="64" height="64" />
                         <h1>@hourData.WeatherDescription</h1>
                         <div>
                             @hourData.Temperature@hourData.TemperatureUnit <span style="color: #dddddd;">(Feels like @hourData.TemperatureApparent@hourData.TemperatureUnit)</span>
