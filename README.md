@@ -4,4 +4,4 @@ A simple weather app built with Blazor and Bootstrap, with data sourced from [Op
 **Known issues:**
 - Directly navigating to a page via coordinate URL parameters does not update the displayed location.
 
-![equinox](https://github.com/MultiverShaun/EquinoxWeather/assets/68468439/330655f4-1e0b-4edc-b6cb-d9e1866da396)
+![Screenshot 2025-05-27 at 14-58-19 Equinox · Seattle](https://github.com/user-attachments/assets/84cf4b83-cc70-4b61-b68f-5e806cf69933)
