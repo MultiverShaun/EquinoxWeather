@@ -1,21 +1,18 @@
 ﻿@if (isDataLoaded)
 {
-    <div id="detail-grid">
-        <div>
+    <div class="weather-grid">
+        <div class="weather-item">
             <AdvancedInfoBox LocationTime="@(locationTime)" TimeZone="@(Weather.timezone)" Weather="@Weather" PrecipitationChance="@(precipitationChance)" UvIndex="@(uvIndex)" DewPoint="@dewPoint" Visibility="@visibility" />
         </div>
-
-        <div class="detail-grid-tile app-tile">
+        <div class="weather-item app-tile p-3">
             <_7DayForecastBox Weather="@Weather" />
         </div>
-
+        <div class="weather-item app-tile aqi-box p-3">
+            <AQIBox Lat="@Lat" Lon="@Lon" />
+        </div>
     </div>
-
-    <a class="detail-grid-tile app-tile aqi-box">
-        <AQIBox Lat="@Lat" Lon="@Lon"/>
-    </a>
 }
-else 
+else
 {
     <div class="d-flex justify-content-center">
         <div class="spinner-border" role="status">
@@ -23,6 +20,7 @@ else
         </div>
     </div>
 }
+
 @code {
     [Parameter]
     public OpenMeteoResponse? Weather { get; set; }

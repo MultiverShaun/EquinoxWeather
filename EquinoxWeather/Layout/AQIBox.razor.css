@@ -12,8 +12,7 @@
 
 .more-info {
     text-align: center;
-    width: 50%;
-    margin: auto;
+    width: 50%; 
     background-color: rgb(192, 192, 192, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 1rem;

@@ -46,11 +46,6 @@
     display: inline-block;
 }
 
-.weather-detail-grid {
-    /*backdrop-filter: blur(1.5rem);*/
-    padding-top: 0.5rem;
-}
-
 .github-link{
     font-size: 150%;
     color: #b8f5ff;

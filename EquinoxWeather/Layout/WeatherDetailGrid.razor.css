@@ -1,21 +1,25 @@
-﻿#detail-grid {
+﻿.weather-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(432px, 1fr));
     gap: 0.5rem;
-    margin: auto;
+    padding: 0.5rem 0;
 }
 
-@media (max-width: 362px) {
-    #detail-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+@media (max-width: 480px) {
+    .weather-grid {
+        grid-template-columns: 1fr;
     }
 }
 
 .aqi-box {
-    margin: 0.5rem auto auto auto;
     display: flex;
     justify-content: center;
-    align-items: center;
     text-align: center;
-    text-decoration: none;  
+    text-decoration: none;
+}
+
+@media (max-width: 1327px) {
+    .aqi-box {
+        grid-column: 1 / -1;
+    }
 }
