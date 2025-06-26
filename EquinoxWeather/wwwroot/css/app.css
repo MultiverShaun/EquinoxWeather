@@ -88,8 +88,6 @@ footer {
     background-color: rgb(192, 192, 192, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 2rem;
-    backdrop-filter: blur(1rem);
-    -webkit-backdrop-filter: blur(1rem);
     transition: all 0.3s ease;
 }
 
@@ -98,15 +96,15 @@ footer {
     }
 
 .blur {
-    backdrop-filter: blur(1rem);
-    -webkit-backdrop-filter: blur(1rem);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
 .app-tile {
     background-color: rgb(192, 192, 192, 0.1);
     border: 1px solid rgb(255, 255, 255, 0.2);
-    backdrop-filter: blur(1rem);
-    -webkit-backdrop-filter: blur(1rem);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     transition: all 0.3s ease;
     border-radius: 2rem;
 }

@@ -1,16 +1,9 @@
 ﻿@page "/"
+@using EquinoxWeather.Layout
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService LocalStorage
 
+<h1></h1>
+
 @code {
-    protected override void OnInitialized()
-    {
-        // Manila
-        var defaultLat = 145995;
-        var defaultLon = 1209842;
-
-        LocalStorage.SetItemAsStringAsync("city_name", "Manila");
-
-        NavigationManager.NavigateTo($"/{defaultLat}/{defaultLon}");
-    }
 }

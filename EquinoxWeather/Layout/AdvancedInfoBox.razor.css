@@ -11,8 +11,8 @@
     padding: 1rem;
     border-radius: 2rem;
     transition: all 0.3s ease;
-    backdrop-filter: blur(1.5rem);
-    -webkit-backdrop-filter: blur(1.5rem);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
 .advanced-info-tile:hover {
