@@ -134,15 +134,15 @@ else
     private class HourlyForecastData
     {
         public int Index { get; set; }
-        public string TimeDisplay { get; set; }
-		public string DayDisplay { get; set; }
-		public string MonthDisplay { get; set; }
+        public required string TimeDisplay { get; set; }
+        public required string DayDisplay { get; set; }
+        public required string MonthDisplay { get; set; }
         public int Temperature { get; set; }
         public int TemperatureApparent { get; set; }
-        public string TemperatureUnit { get; set; }
+        public required string TemperatureUnit { get; set; }
         public int PrecipChance { get; set; }
-        public string WeatherIcon { get; set; }
-        public string WeatherDescription { get; set; }
+        public required string WeatherIcon { get; set; }
+        public required string WeatherDescription { get; set; }
         public int Humidity { get; set; }
         public double UVIndex { get; set; }
     }

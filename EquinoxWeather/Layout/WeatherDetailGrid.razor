@@ -38,21 +38,30 @@ else
     private int timeInHours = 0;
     private string locationTime = "";
     private int precipitationChance = 0;
-    private int uvIndex = 0;
+    private double uvIndex = 0;
     private int dewPoint = 0;
     private double visibility = 0.0;
 
     private bool isDataLoaded = false;
 
-    protected async override Task OnInitializedAsync()
+    protected override Task OnParametersSetAsync()
     {
-        timeInHours = ApiTime.Hour;
-        locationTime = ApiTime.ToString("hh:mm tt");
+        if (Weather?.hourly != null)
+        {
+            timeInHours = ApiTime.Hour;
+            locationTime = ApiTime.ToString("hh:mm tt");
 
-        precipitationChance = Weather.hourly.precipitation_probability[timeInHours];
-        uvIndex = Convert.ToInt32(Weather.hourly.uv_index[timeInHours]);
-        dewPoint = Convert.ToInt32(Weather.hourly.dew_point_2m[timeInHours]);
-        visibility = Weather.hourly.visibility[timeInHours]/1000;
-        isDataLoaded = true;
+            if (timeInHours >= 0 && timeInHours < Weather.hourly.precipitation_probability.Count)
+            {
+                precipitationChance = Weather.hourly.precipitation_probability[timeInHours];
+                uvIndex = Weather.hourly.uv_index[timeInHours];
+                dewPoint = Convert.ToInt32(Weather.hourly.dew_point_2m[timeInHours]);
+                visibility = Weather.hourly.visibility[timeInHours] / 1000.0;
+            }
+
+            isDataLoaded = true;
+        }
+
+        return Task.CompletedTask;
     }
 }
