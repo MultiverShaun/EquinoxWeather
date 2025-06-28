@@ -94,6 +94,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col">
+                        <div class="modal-body temp-modal">
+                            <h5>Background Images</h5>
+                            <div class="btn-group" role="group" aria-label="Background Images">
+                                <input type="radio" class="btn-check" name="btnbackgrounds" id="btnbackgrounds1" autocomplete="off" checked='@(ShowWeatherBackgrounds == "true")' @onchange='() => UpdateSettings("show_weather_backgrounds", "true")'>
+                                <label class="btn btn-outline-primary" for="btnbackgrounds1">on</label>
+
+                                <input type="radio" class="btn-check" name="btnbackgrounds" id="btnbackgrounds2" autocomplete="off" checked='@(ShowWeatherBackgrounds == "false")' @onchange='() => UpdateSettings("show_weather_backgrounds", "false")'>
+                                <label class="btn btn-outline-primary" for="btnbackgrounds2">off</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -107,8 +119,9 @@
 @code {
     [Parameter]
     public string? WeatherIcon { get; set; }
-    public string? UnitTemp = "";
-    public string? UnitDistance = "";
+    public string? UnitTemp = "c";
+    public string? UnitDistance = "km";
+    public string? ShowWeatherBackgrounds = "true";
 
     private bool settingsChanged = false;
 
@@ -205,6 +218,7 @@
     {
         UnitTemp = await LocalStorage.GetItemAsStringAsync("unit_temp");
         UnitDistance = await LocalStorage.GetItemAsStringAsync("unit_distance");
+        ShowWeatherBackgrounds = await LocalStorage.GetItemAsStringAsync("show_weather_backgrounds");
     }
 
     private async Task UpdateSettings(string key, string value)
