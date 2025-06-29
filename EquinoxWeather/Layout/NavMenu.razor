@@ -18,7 +18,7 @@
                     else
                     {
                         <i class="fas fa-location-arrow"></i>
-                        <span class="units-label d-none d-sm-block">Locate</span>
+                        <span class="nav-button-label d-none d-sm-block">Locate</span>
                     }
                 </div>
             </li>
@@ -51,7 +51,7 @@
             <li class="nav-item">
                 <div class="nav-link d-flex" data-bs-toggle="modal" data-bs-target="#settingsModal">
                     <i class="fas fa-sliders-h"></i>
-                    <span class="units-label d-none d-sm-block">Units</span>
+                    <span class="nav-button-label d-none d-sm-block">Adjust</span>
                 </div>
             </li>
         </ul>
@@ -62,8 +62,8 @@
 <div class="modal fade" id="settingsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content bg-dark settings-modal">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5 settings-modal-title" id="settingsModalLabel">Adjust Units</h1>
+            <div class="modal-header text-center">
+                <h1 class="modal-title fs-5 w-100" id="settingsModalLabel">Adjust Settings</h1>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" @onclick="ReloadPage"></button>
             </div>
 
