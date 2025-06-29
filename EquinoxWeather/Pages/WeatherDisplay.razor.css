@@ -68,6 +68,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: calc(30vw + 3rem);
 }
 
 .photo-credits {

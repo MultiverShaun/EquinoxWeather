@@ -62,15 +62,15 @@
 			<span class="me-4 fs-5">Equinox</span>
 			@if (weatherStatus.FromUnsplash())
 			{
-				<span class="footer-link-container photo-credits-container px-3 py-1">
+				<div class="footer-link-container photo-credits-container px-3 py-1">
 					<a class="photo-credits" href="@(photoCreditUrl)" target="_blank">
 						<span>
 							<i class="fas fa-camera"></i> 
-							Credit: 
+							Photo by 
 							@(photoAuthorName)
 						</span>
 					</a>
-				</span>
+				</div>
 			}
 			else {}
 		</div>
