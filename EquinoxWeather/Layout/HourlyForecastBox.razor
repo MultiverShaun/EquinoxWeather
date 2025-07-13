@@ -1,7 +1,7 @@
 ﻿@inject IRepository _repo
 
 @if (isDataLoaded){
-    <div class="detail-grid-tile app-tile hour-forecast-box">
+    <div class="detail-grid-tile app-tile blur hour-forecast-box">
         <h3 style="text-align: center;"><i class="fas fa-calendar-day fa-sm"></i> Hourly Forecast</h3>
         <div class="hour-forecast-list">
             @foreach (var hourData in hourlyForecasts)

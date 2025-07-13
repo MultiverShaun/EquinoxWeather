@@ -4,10 +4,10 @@
         <div class="weather-item">
             <AdvancedInfoBox LocationTime="@(locationTime)" TimeZone="@(Weather.timezone)" Weather="@Weather" PrecipitationChance="@(precipitationChance)" UvIndex="@(uvIndex)" DewPoint="@dewPoint" Visibility="@visibility" />
         </div>
-        <div class="weather-item app-tile p-3">
+        <div class="weather-item app-tile blur p-3">
             <_7DayForecastBox Weather="@Weather" />
         </div>
-        <div class="weather-item app-tile aqi-box p-3">
+        <div class="weather-item app-tile blur aqi-box p-3">
             <AQIBox Lat="@Lat" Lon="@Lon" />
         </div>
     </div>
