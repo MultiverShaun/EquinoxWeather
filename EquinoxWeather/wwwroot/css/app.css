@@ -124,7 +124,8 @@ footer {
     padding: 1rem;
     max-width: 500px;
     background-color: rgb(64, 64, 64, 0.3);
-    color: white;
+    color: white;   
+    animation: fadeIn 1s;
 }
 
 .equinox-alert-dismiss {

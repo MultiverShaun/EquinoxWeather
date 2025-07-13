@@ -138,7 +138,9 @@ nav {
 }
 
 .geolocation-alert {
-    margin: 3.5rem auto auto;
+    margin: 12rem auto auto;
+    position: absolute;
+    z-index: 1000;
 }
 
 .settings-modal {

@@ -47,6 +47,16 @@
             }
         </div>
 
+
+        <!-- Alert for geolocation error -->
+        @if (ShowGeolocationError)
+        {
+            <div class="equinox-alert geolocation-alert app-tile blur" role="alert">
+                <strong>Oops!</strong> We cannot find your location. Check Location Services and location permissions.
+                <div class="app-tile equinox-alert-dismiss mt-2" @onclick="() => ShowGeolocationError = false"><i class="fas fa-close"></i> Close</div>
+            </div>
+        }
+
         <ul class="navbar-nav ms-1">
             <li class="nav-item">
                 <div class="nav-link d-flex" data-bs-toggle="modal" data-bs-target="#settingsModal">
@@ -57,15 +67,6 @@
         </ul>
     </div>
 </nav>
-
-<!-- Alert for geolocation error -->
-@if (ShowGeolocationError)
-{
-    <div class="equinox-alert geolocation-alert app-tile blur" role="alert">
-        <strong>Oops!</strong> We cannot find your location. Check Location Services and location permissions.
-        <div class="app-tile equinox-alert-dismiss mt-2" @onclick="() => ShowGeolocationError = false"><i class="fas fa-close"></i> Close</div>
-    </div>
-}
 
 <!-- Modal -->
 <div class="modal fade" id="settingsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
