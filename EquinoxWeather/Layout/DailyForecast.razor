@@ -50,7 +50,7 @@
 
     public string weatherIcon = "";
 
-    protected async override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         DateTime date = DateTime.Parse(DayTimestamp);
 
@@ -79,7 +79,7 @@
             dayDisplay = "Today";
         }
 
-        weatherStatus = await _repo.GetWeatherCodeInfo(WeatherCode);
+        weatherStatus = _repo.GetWeatherCodeInfo(WeatherCode);
 
         weatherIcon = weatherStatus.WeatherIconDay();
 

@@ -9,6 +9,10 @@ namespace EquinoxWeather.Services.Managers
 {
 	public class Repository : IRepository
 	{
+		private readonly HttpClient _http;
+
+		public Repository(HttpClient http) => _http = http;
+
 		public async Task<OpenMeteoResponse> GetWeather(double latitude, double longitude, bool unitTempIsF, bool unitDistanceIsMph)
 		{
             var unitTemp = unitTempIsF ? "&temperature_unit=fahrenheit" : "";
@@ -20,8 +24,7 @@ namespace EquinoxWeather.Services.Managers
                       $"&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_hours,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant" +
                       $"{unitTemp}{unitDistance}&timezone=auto&models=best_match";
 
-            using var client = new HttpClient();
-            var response = await client.GetAsync(url);
+            var response = await _http.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -44,8 +47,7 @@ namespace EquinoxWeather.Services.Managers
             var url = $"https://air-quality-api.open-meteo.com/v1/air-quality?latitude={latitude}&longitude={longitude}" +
                       $"&current=us_aqi,pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone";
 
-            using var client = new HttpClient();
-            var response = await client.GetAsync(url);
+            var response = await _http.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -64,87 +66,43 @@ namespace EquinoxWeather.Services.Managers
         }
 
 
-        private static readonly IDictionary<int, IWeatherCode> WeatherCodes = new Dictionary<int, IWeatherCode>
+		public IWeatherCode GetWeatherCodeInfo(int weatherCode)
 		{
-			{ 0, new _0() },
-			{ 1, new _1() },
-			{ 2, new _2() },
-			{ 3, new _3() },
-			{ 45, new _45() },
-			{ 48, new _48() },
-			{ 51, new _51() },
-			{ 53, new _53() },
-			{ 55, new _55() },
-			{ 56, new _56() },
-			{ 57, new _57() },
-			{ 61, new _61() },
-			{ 63, new _63() },
-			{ 65, new _65() },
-			{ 66, new _66() },
-			{ 67, new _67() },
-			{ 71, new _71() },
-			{ 73, new _73() },
-			{ 75, new _75() },
-			{ 77, new _77() },
-			{ 80, new _80() },
-			{ 81, new _81() },
-			{ 82, new _82() },
-			{ 85, new _85() },
-			{ 86, new _86() },
-			{ 95, new _95() },
-			{ 96, new _96() },
-			{ 99, new _99() },
-        };
-		public async Task<IWeatherCode> GetWeatherCodeInfo(int weatherCode)
-		{
-			if (WeatherCodes.TryGetValue(weatherCode, out IWeatherCode weatherCodeInfo))
-			{
-				return await Task.FromResult(weatherCodeInfo);
-			}
+			if (WeatherCodeRegistry.All.TryGetValue(weatherCode, out IWeatherCode weatherCodeInfo))
+				return weatherCodeInfo;
 
 			throw new ArgumentException($"Invalid weather code: {weatherCode}");
 		}
 
 		public IDictionary<int, IWeatherCode> GetWeatherCodeDictionary()
 		{
-			return WeatherCodes;
+			return WeatherCodeRegistry.All.ToDictionary(k => k.Key, v => v.Value);
 		}
 
-		public async Task<DateTime> GetTimeZoneInfo(string apiTimeZone)
+		public DateTime GetTimeZoneInfo(string apiTimeZone)
 		{
-            DateTime utcNow = DateTime.UtcNow;
+			var tz = TimeZoneInfo.FindSystemTimeZoneById(apiTimeZone);
+			return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz);
+		}
 
-            // Get the time zone info for the API time zone
-            TimeZoneInfo apiTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(apiTimeZone);
-
-            // Convert the UTC time to the API time zone
-            DateTime apiTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, apiTimeZoneInfo);
-
-			return await Task.FromResult(apiTime);
-        }
-
-		public async Task<string> ParseDegree(int degree)
+		public string ParseDegree(int degree)
 		{
-			if (degree > 337.5) return await Task.FromResult("North");
-			if (degree > 292.5) return await Task.FromResult("Northwest");
-			if (degree > 247.5) return await Task.FromResult("West");
-			if (degree > 202.5) return await Task.FromResult("Southwest");
-			if (degree > 157.5) return await Task.FromResult("South");
-			if (degree > 122.5) return await Task.FromResult("Southeast");
-			if (degree > 67.5) return await Task.FromResult("East");
-			if (degree > 22.5) { return await Task.FromResult("Northeast"); }
-			else
-			{
-				return "-";
-			}
+			if (degree > 337.5) return "North";
+			if (degree > 292.5) return "Northwest";
+			if (degree > 247.5) return "West";
+			if (degree > 202.5) return "Southwest";
+			if (degree > 157.5) return "South";
+			if (degree > 122.5) return "Southeast";
+			if (degree > 67.5)  return "East";
+			if (degree > 22.5)  return "Northeast";
+			return "-";
 		}
 
         public async Task<GeocodingResponse> GetCitySuggestions(string input)
         {
             var url = $"https://geocoding-api.open-meteo.com/v1/search?name={input}&count=5&language=en&format=json";
 
-            using var client = new HttpClient();
-            var response = await client.GetAsync(url);
+            var response = await _http.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
             {

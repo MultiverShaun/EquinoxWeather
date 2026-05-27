@@ -8,10 +8,10 @@ namespace EquinoxWeather.Infrastructure.Interfaces
 	{
 		Task<OpenMeteoResponse> GetWeather(double latitude, double longitude, bool unitTempIsF, bool unitDistanceIsMph);
         Task<AirQualityIndex> GetAirQuality(double latitude, double longitude);
-        Task<IWeatherCode> GetWeatherCodeInfo(int weatherCode);
+        IWeatherCode GetWeatherCodeInfo(int weatherCode);
 		IDictionary<int, IWeatherCode> GetWeatherCodeDictionary();
-		Task<DateTime> GetTimeZoneInfo(string apiTimeZone);
-		Task<string> ParseDegree(int degree);
+		DateTime GetTimeZoneInfo(string apiTimeZone);
+		string ParseDegree(int degree);
         Task<GeocodingResponse> GetCitySuggestions(string input);
 
 

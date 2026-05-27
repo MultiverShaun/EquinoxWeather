@@ -15,7 +15,6 @@ namespace EquinoxWeather.Infrastructure.Interfaces
 		string NightPhotoCreditUrl();
 		string NightPhotoDirectUrl();
 		string NightPhotoAuthorName();
-		bool FromUnsplash();
 		string WeatherIconDay();
 		string WeatherIconNight();
 	}

@@ -97,7 +97,7 @@ else
 			airQualityDescription = "Some may experience health effects, particularly sensitive groups.";
 			descriptionColor = "#ff9b70";
 		}
-		else if (aqi > 201 && aqi <= 300)
+		else if (aqi > 200 && aqi <= 300)
 		{
 			airQualityLevel = "Very Unhealthy";
 			airQualityDescription = "Increased risk of health effects for everyone.";
@@ -111,9 +111,5 @@ else
 		}
 
 		isDataLoaded = true;
-	}
-	protected async override Task OnInitializedAsync()
-	{
-		await LoadAirQualityData();
 	}
 }

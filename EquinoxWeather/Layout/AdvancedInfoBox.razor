@@ -173,7 +173,7 @@
             UvIndexDescription = "Extreme";
         }
         // Wind
-        parsedDirection = await _repo.ParseDegree(Weather.current.wind_direction_10m);
+        parsedDirection = _repo.ParseDegree(Weather.current.wind_direction_10m);
 
         // Sunrise/Sunset
         DateTime rawSunrise = DateTime.Parse($"{Weather.daily.sunrise.FirstOrDefault()}", null, System.Globalization.DateTimeStyles.RoundtripKind);

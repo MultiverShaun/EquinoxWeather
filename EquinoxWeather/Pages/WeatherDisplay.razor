@@ -8,23 +8,12 @@
 
 @if (isDataLoaded){
 
-	<style>
-		.content {
-			background-size: cover;
-			background-position: center;
-			color: white;
-		}
-	</style>
-
 	@if (showWeatherBackgrounds)
 	{
-		<style>
-            .content {
-                background-image: url('@(photoDirectUrl)');
-            }
-		</style>
+		<div class="weather-bg" style="background-image: url('@photoDirectUrl');"></div>
 	}
 
+	<div class="weather-content">
 	<div class="weather-main">
 		<h1 class="location" id="location">@cityName</h1>
 		<div class="temperature-container">
@@ -60,19 +49,15 @@
 				</svg>
 			</a>
 			<span class="me-4 fs-5">Equinox</span>
-			@if (weatherStatus.FromUnsplash())
-			{
-				<div class="footer-link-container photo-credits-container px-3 py-1">
-					<a class="photo-credits" href="@(photoCreditUrl)" target="_blank">
-						<span>
-							<i class="fas fa-camera"></i> 
-							Photo by 
-							@(photoAuthorName)
-						</span>
-					</a>
-				</div>
-			}
-			else {}
+			<div class="footer-link-container photo-credits-container px-3 py-1">
+				<a class="photo-credits" href="@(photoCreditUrl)" target="_blank">
+					<span>
+						<i class="fas fa-camera"></i>
+						Photo by
+						@(photoAuthorName)
+					</span>
+				</a>
+			</div>
 		</div>
 
 		<ul class="nav col-md-6 justify-content-end list-unstyled d-flex pt-2 pt-sm-0">
@@ -88,6 +73,7 @@
 			</li>
 		</ul>
 	</footer>
+	</div>
 
 }
 else
@@ -125,7 +111,6 @@ else
 	private int roundedTemperatureApparent = 0;
 	private int roundedMaxTemp = 0;
 	private int roundedMinTemp = 0;
-	private string locationTime = "";
 	private int timeInHours = 0;
 	private int dayOfMonth = 0;
 	private int month = 0;
@@ -151,7 +136,7 @@ else
 		roundedMinTemp = Convert.ToInt32(Weather.daily.temperature_2m_min.FirstOrDefault());
 
 		var weatherCode = Weather.current.weather_code;
-		weatherStatus = await _repo.GetWeatherCodeInfo(weatherCode);
+		weatherStatus = _repo.GetWeatherCodeInfo(weatherCode);
 
 		if (Weather.current.is_day == 1)
 		{
@@ -175,12 +160,10 @@ else
 			weatherIcon = weatherStatus.WeatherIconNight();
 		}
 
-		apiTime = await _repo.GetTimeZoneInfo(Weather.timezone);
+		apiTime = _repo.GetTimeZoneInfo(Weather.timezone);
 		timeInHours = apiTime.Hour;
 		dayOfMonth = apiTime.Day;
 		month = apiTime.Month;
-		locationTime = apiTime.ToString("hh:mm tt");
-
 		isDataLoaded = true;
 	}
 
@@ -203,12 +186,6 @@ else
 		{
             showWeatherBackgrounds = false;
 		}
-	}
-
-	protected async override Task OnInitializedAsync()
-	{
-		await FetchLocalStorage();
-		await LoadWeatherData();
 	}
 
 }

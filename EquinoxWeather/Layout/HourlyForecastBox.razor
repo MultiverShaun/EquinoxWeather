@@ -78,22 +78,20 @@ else
 
     private bool isDataLoaded = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         isDataLoaded = false;
         if (Weather != null)
         {
-            var tasks = new List<Task<HourlyForecastData>>();
-            for (int index = CurrentHour; index <= CurrentHour + 72; index++)
-            {
-                tasks.Add(GetHourlyForecastData(index));
-            }
-            hourlyForecasts = (await Task.WhenAll(tasks)).ToList();
+            hourlyForecasts = Enumerable
+                .Range(CurrentHour, 73)
+                .Select(GetHourlyForecastData)
+                .ToList();
         }
         isDataLoaded = true;
     }
 
-    private async Task<HourlyForecastData> GetHourlyForecastData(int index)
+    private HourlyForecastData GetHourlyForecastData(int index)
     {
         var forecast = Weather.hourly;
         var temperature = Convert.ToInt32(forecast.temperature_2m[index]);
@@ -110,7 +108,7 @@ else
         var dayDisplay = forecastDate.Day;
         var monthDisplay = forecastDate.Month;
 
-        var weatherStatus = await _repo.GetWeatherCodeInfo(weatherCode);
+        var weatherStatus = _repo.GetWeatherCodeInfo(weatherCode);
         var weatherIcon = isDay == 1 ? weatherStatus.WeatherIconDay() : weatherStatus.WeatherIconNight();
         var weatherDescription = weatherStatus.CodeDescription();
 
