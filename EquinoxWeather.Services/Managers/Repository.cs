@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 using EquinoxWeather.Infrastructure.Interfaces;
 using EquinoxWeather.Infrastructure.Models.AirQualityData;
 using EquinoxWeather.Infrastructure.Models.WeatherData;
@@ -10,6 +10,7 @@ namespace EquinoxWeather.Services.Managers
 	public class Repository : IRepository
 	{
 		private readonly HttpClient _http;
+		private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
 
 		public Repository(HttpClient http) => _http = http;
 
@@ -32,7 +33,7 @@ namespace EquinoxWeather.Services.Managers
             }
 
             var content = await response.Content.ReadAsStringAsync();
-            var weatherDataList = JsonConvert.DeserializeObject<OpenMeteoResponse>(content);
+            var weatherDataList = JsonSerializer.Deserialize<OpenMeteoResponse>(content, JsonOptions);
 
             if (weatherDataList == null)
             {
@@ -55,7 +56,7 @@ namespace EquinoxWeather.Services.Managers
             }
 
             var content = await response.Content.ReadAsStringAsync();
-            var airQualityList = JsonConvert.DeserializeObject<AirQualityIndex>(content);
+            var airQualityList = JsonSerializer.Deserialize<AirQualityIndex>(content, JsonOptions);
 
             if (airQualityList == null)
             {
@@ -110,7 +111,7 @@ namespace EquinoxWeather.Services.Managers
             }
 
             var content = await response.Content.ReadAsStringAsync();
-            var suggestions = JsonConvert.DeserializeObject<GeocodingResponse>(content);
+            var suggestions = JsonSerializer.Deserialize<GeocodingResponse>(content, JsonOptions);
 
             if (suggestions == null)
             {
