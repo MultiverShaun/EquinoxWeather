@@ -1,4 +1,5 @@
 ﻿@inject IRepository _repo
+@inject ILocalStorageService LocalStorage
 
 @if (isDataLoaded){
     <div class="detail-grid-tile app-tile blur hour-forecast-box">
@@ -38,7 +39,7 @@
                             @hourData.Temperature@hourData.TemperatureUnit <span style="color: #dddddd;">(Feels like @hourData.TemperatureApparent@hourData.TemperatureUnit)</span>
                         </div>
                         <div class="modal-stats">
-                            <i class="fas fa-umbrella"></i> @hourData.PrecipChance%
+                            <i class="fas fa-umbrella"></i> @hourData.PrecipChance% (@(hourData.Precipitation)@((unitDistance == "mi") ? "in" : "mm"))
                             <span class="px-1"></span>
                             <i class="fas fa-droplet"></i> @hourData.Humidity%
                             <span class="px-1"></span>
@@ -46,9 +47,15 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index-1)">Previous</button>
+                        @if (hourData.Index != CurrentHour)
+                        {
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index-1)">Previous</button>
+                        }
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index+1)">Next</button>
+                        @if (hourData.Index != CurrentHour + 72)
+                        {
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index+1)">Next</button>
+                        }
                     </div>
                 </div>
             </div>
@@ -75,12 +82,13 @@ else
     public int Month { get; set; }
 
     private List<HourlyForecastData> hourlyForecasts = new();
+    private string? unitDistance = "";
+    private bool isDataLoaded;
 
-    private bool isDataLoaded = false;
-
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
         isDataLoaded = false;
+        unitDistance = await LocalStorage.GetItemAsStringAsync("unit_distance");
         if (Weather != null)
         {
             hourlyForecasts = Enumerable
@@ -97,6 +105,7 @@ else
         var temperature = Convert.ToInt32(forecast.temperature_2m[index]);
         var temperatureApparent = Convert.ToInt32(forecast.apparent_temperature[index]);
         var temperatureUnit = Weather.hourly_units.temperature_2m;
+        var precipitation = forecast.precipitation[index];
         var precipChance = forecast.precipitation_probability[index];
         var isDay = forecast.is_day[index];
         var weatherCode = forecast.weather_code[index];
@@ -121,6 +130,7 @@ else
                 Temperature = temperature,
                 TemperatureApparent = temperatureApparent,
                 TemperatureUnit = temperatureUnit,
+                Precipitation = precipitation,
                 PrecipChance = precipChance,
                 WeatherIcon = weatherIcon,
                 WeatherDescription = weatherDescription,
@@ -138,6 +148,7 @@ else
         public int Temperature { get; set; }
         public int TemperatureApparent { get; set; }
         public required string TemperatureUnit { get; set; }
+        public double Precipitation { get; set; }
         public int PrecipChance { get; set; }
         public required string WeatherIcon { get; set; }
         public required string WeatherDescription { get; set; }
