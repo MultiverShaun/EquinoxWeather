@@ -70,21 +70,9 @@
         border: 1px solid rgba(255, 255, 255, 0.4);
     }
 
-    .footer-link {
-        color: #b8f5ff;
-        text-decoration: none;
-        font-weight: 500;
-    }
-
 .photo-credits-container {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: calc(30vw + 3rem);
-}
-
-.photo-credits {
-    color: #b8f5ff;
-    text-decoration: none;
-    font-weight: 500;
 }
