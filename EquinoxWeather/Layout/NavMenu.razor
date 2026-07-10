@@ -94,13 +94,13 @@
                     </div>
                     <div class="col">
                         <div class="modal-body temp-modal">
-                            <h5>Distance</h5>
-                            <div class="btn-group" role="group" aria-label="Kilometers/Miles settings">
+                            <h5>Distance & Precip</h5>
+                            <div class="btn-group" role="group" aria-label="Kilometers/Miles, mm/in settings">
                                 <input type="radio" class="btn-check" name="btndistance" id="btndistance1" autocomplete="off" checked='@(UnitDistance == "km")' @onchange='() => UpdateSettings("unit_distance", "km")'>
-                                <label class="btn btn-outline-primary" for="btndistance1">km</label>
+                                <label class="btn btn-outline-primary" for="btndistance1">km/mm</label>
 
                                 <input type="radio" class="btn-check" name="btndistance" id="btndistance2" autocomplete="off" checked='@(UnitDistance == "mi")' @onchange='() => UpdateSettings("unit_distance", "mi")'>
-                                <label class="btn btn-outline-primary" for="btndistance2">mi</label>
+                                <label class="btn btn-outline-primary" for="btndistance2">mi/in</label>
                             </div>
                         </div>
                     </div>

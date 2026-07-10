@@ -71,6 +71,7 @@
         public List<double> dew_point_2m { get; set; }
         public List<double> apparent_temperature { get; set; }
         public List<int> precipitation_probability { get; set; }
+        public List<double> precipitation { get; set; }
         public List<int> weather_code { get; set; }
         public List<double> visibility { get; set; }
         public List<double> uv_index { get; set; }

@@ -17,9 +17,22 @@
 
         </div>
     </div>
-
+    
     <div class="advanced-info-tile">
-        <h3 class="tile-title"><i class="fas fa-umbrella"></i> Chance</h3>
+        <h3 class="tile-title"><i class="fas fa-sun"></i> UV Index</h3>
+
+        <h2>@(UvIndex)</h2>
+        <h5>@UvIndexDescription</h5>
+        
+    </div>
+    
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-umbrella"></i> Precipitation</h3>
+        <h2>@(Weather.current.precipitation)@((unitDistance == "mi") ? "in" : "mm")</h2>
+    </div>
+    
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-umbrella"></i> Precip. Chance</h3>
         <h2>@(PrecipitationChance)%</h2>
     </div>
 
@@ -47,14 +60,6 @@
     </div>
 
     <div class="advanced-info-tile">
-        <h3 class="tile-title"><i class="fas fa-sun"></i> UV Index</h3>
-
-        <h2>@(UvIndex)</h2>
-        <h5>@UvIndexDescription</h5>
-        
-    </div>
-
-    <div class="advanced-info-tile">
         <h3 class="tile-title"><i class="fas fa-gauge"></i> Pressure</h3>
         <h2><i class="fas @(airPressureIcon)"></i> @(airPressure) <span style="font-size: 66%">@(airPressureUnit)</span></h2>
     </div>
@@ -69,6 +74,11 @@
         <h3 class="tile-title"><i class="fas fa-sun"></i> Sun</h3>
         <h4><i class="fas fa-arrow-up"></i> @(convertedSunrise)</h4>
         <h4><i class="fas fa-arrow-down"></i> @(convertedSunset)</h4>
+    </div>
+    
+    <div class="advanced-info-tile">
+        <h3 class="tile-title"><i class="fas fa-map"></i> Map</h3>
+        <h4><a class="link" target="_blank" href="https://zoom.earth/maps/radar/#view=@(Weather.latitude),@(Weather.longitude),10z/overlays=wind,crosshair">Launch Zoom Earth</a></h4>
     </div>
 </div>
 
@@ -131,7 +141,7 @@
             humidityIcon = "fa-volcano";
         }
 
-        // Visibility
+        // Visibility/precip
         unitDistance = await LocalStorage.GetItemAsStringAsync("unit_distance");
 
         // Air Pressure

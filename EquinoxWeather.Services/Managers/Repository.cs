@@ -29,12 +29,13 @@ namespace EquinoxWeather.Services.Managers
 
 			var unitTemp = unitTempIsF ? "&temperature_unit=fahrenheit" : "";
 			var unitDistance = unitDistanceIsMph ? "&wind_speed_unit=mph" : "";
+			var unitPrecip = unitDistanceIsMph ? "&precipitation_unit=inch" : "";
 
 			var url = $"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}" +
 					  $"&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m" +
-					  $"&hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,precipitation_probability,weather_code,visibility,uv_index,is_day" +
+					  $"&hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,precipitation_probability,precipitation,weather_code,visibility,uv_index,is_day" +
 					  $"&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_hours,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant" +
-					  $"{unitTemp}{unitDistance}&timezone=auto&models=best_match";
+					  $"{unitTemp}{unitDistance}{unitPrecip}&timezone=auto&models=best_match";
 
 			var response = await _http.GetAsync(url);
 
