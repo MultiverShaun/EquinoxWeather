@@ -7,6 +7,12 @@
         <div class="hour-forecast-list">
             @foreach (var hourData in hourlyForecasts)
             {
+                if (hourData.Index % 24 == 0)
+                {
+                    <div class="hourly-forecast-card">
+                        <strong>@(hourData.MonthDisplay)/@(hourData.DayDisplay)</strong>
+                    </div>
+                }
                 <div class="hourly-forecast-card" data-bs-toggle="modal" data-bs-target="#hourModal@(hourData.Index)">
                     <span class="timedisplay">
                         <span class="hour">@hourData.TimeDisplay</span>

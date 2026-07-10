@@ -6,7 +6,20 @@
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
+    padding-top: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
+    .hour-forecast-list::-webkit-scrollbar {
+        height: 6px;
+    }
+    .hour-forecast-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .hour-forecast-list::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+    }
+
 .hour {
     font-weight: 500;
 }
@@ -31,7 +44,8 @@
 
     .hourly-forecast-card:hover {
         background-color: rgba(192, 192, 192, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        transform: translateY(-4px);
     }
 
 .hour-modal {
